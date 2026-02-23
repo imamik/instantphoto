@@ -1,6 +1,6 @@
 {
   "name": "@instantphoto/react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React components for instant film photo effects using WebGL",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -77,7 +77,8 @@
     "vitest": "^4.0.18"
   },
   "keywords": [
-    "polaroid", "instant-photo",
+    "polaroid",
+    "instant-photo",
     "instax",
     "react",
     "film",

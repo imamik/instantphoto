@@ -1,5 +1,26 @@
 # @instantphoto/react
 
+## 0.2.0
+
+### Minor Changes
+
+- Rename all public API identifiers from `Polaroid*` to `InstantPhoto*` to match the repository rebrand.
+
+  **Breaking renames:**
+
+  | Before                     | After                          |
+  | -------------------------- | ------------------------------ |
+  | `PolaroidFrame`            | `InstantPhotoFrame`            |
+  | `PolaroidImageEditor`      | `InstantPhotoImageEditor`      |
+  | `PolaroidFrameProps`       | `InstantPhotoFrameProps`       |
+  | `PolaroidImageEditorProps` | `InstantPhotoImageEditorProps` |
+  | `PolaroidSettings`         | `InstantPhotoSettings`         |
+  | `PolaroidGLOptions`        | `InstantPhotoGLOptions`        |
+
+  CSS class prefix changed from `plrd-` to `ipf-` and CSS custom properties from `--plrd-*` to `--ipf-*`.
+
+  Film type strings (`'polaroid'`, `'polaroid_600'`) are unchanged.
+
 ## 0.1.0
 
 ### Minor Changes
