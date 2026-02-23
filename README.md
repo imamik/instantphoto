@@ -68,7 +68,7 @@ function PhotoCard() {
         frameType="polaroid_600"
         filmType="polaroid"
         width={320}
-        onRender={setCapture}
+        onRender={fn => setCapture(() => fn)}
         onError={err => console.error(err)}
       />
 
@@ -206,7 +206,7 @@ All canvas dimensions are at 300 DPI, so exported images are print-ready at the 
 type CaptureFn = (options?: CaptureOptions) => Promise<Blob | null>
 
 interface CaptureOptions {
-  target?: 'image' | 'frame'   // 'image' = canvas only; 'frame' = full card with border
+  target?: 'image' | 'frame'   // 'image' = canvas only; 'frame' = full frame with white border
   format?: 'image/png' | 'image/jpeg' | 'image/webp'
   quality?: number              // 0–1, for JPEG/WebP only
 }
