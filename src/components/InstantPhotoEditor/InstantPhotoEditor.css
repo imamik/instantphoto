@@ -1,0 +1,59 @@
+/* ---------------------------------------------------------------------------
+ * @instantphoto/react – InstantPhotoEditor styles
+ *
+ * Upload button and delete overlay button used by the InstantPhotoEditor
+ * convenience component.
+ * -------------------------------------------------------------------------- */
+
+/* Upload button — fills and centres within .ipf-empty-state */
+.ipf-upload-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1.5px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+  padding: 1.2em 1.6em;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.8rem;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s;
+}
+.ipf-upload-btn:hover {
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
+.ipf-upload-btn svg {
+  width: 1.8em;
+  height: 1.8em;
+}
+
+/* Delete button — top-right corner, pointer-events: auto overrides parent none */
+.ipf-delete-btn {
+  position: absolute;
+  top: 0.45em;
+  right: 0.45em;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6em;
+  height: 1.6em;
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  backdrop-filter: blur(3px);
+  transition: background 0.15s;
+}
+.ipf-delete-btn:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+.ipf-delete-btn svg {
+  width: 0.85em;
+  height: 0.85em;
+}

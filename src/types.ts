@@ -260,6 +260,14 @@ export interface InstantPhotoImageEditorProps {
    * is provided (useful for file-upload flows where src starts undefined).
    */
   src?: string | HTMLImageElement | ImageBitmap
+  /** Rendered centred inside the image area when `src` is not set. */
+  emptyState?: React.ReactNode
+  /**
+   * Rendered inside the image area on top of the photo when `src` is set.
+   * The wrapper has `pointer-events: none`; add `pointer-events: auto` to
+   * interactive children (buttons, icons).
+   */
+  imageOverlay?: React.ReactNode
   /** Frame format. Defaults to `'polaroid_600'`. */
   frameType?: FrameType
   /** Film emulsion profile. Defaults to `'polaroid'`. */
@@ -349,4 +357,17 @@ export interface InstantPhotoImageEditorProps {
    * Called after the editor performs a keyboard redo (Ctrl+Y / Ctrl+Shift+Z).
    */
   onRedo?: (transform: ImageTransform) => void
+}
+
+/** Props for the InstantPhotoEditor convenience component */
+export interface InstantPhotoEditorProps extends Omit<
+  InstantPhotoImageEditorProps,
+  'emptyState' | 'imageOverlay'
+> {
+  /** Called when the user picks a file; a hidden upload button appears when set. */
+  onUpload?: (file: File) => void
+  /** Called when the delete button is clicked; a delete overlay button appears when set. */
+  onDelete?: () => void
+  /** `accept` attribute for the hidden file input. Defaults to `'image/*'`. */
+  accept?: string
 }

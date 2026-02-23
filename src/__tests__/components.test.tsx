@@ -2,6 +2,7 @@ import { render, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { InstantPhotoFrame } from '../components/InstantPhotoFrame'
 import { InstantPhotoImageEditor } from '../components/InstantPhotoImageEditor'
+import { InstantPhotoEditor } from '../components/InstantPhotoEditor'
 
 // ---------------------------------------------------------------------------
 // Note: jsdom does not implement WebGL, so canvas.getContext('webgl')
@@ -98,6 +99,89 @@ describe('InstantPhotoImageEditor', () => {
     // Transform starts at { panX:0, panY:0, scale:1 } – no change event on mount
     // (onTransformChange only fires on gesture, not on initial render)
     expect(onTransformChange).not.toHaveBeenCalled()
+  })
+})
+
+describe('InstantPhotoImageEditor emptyState / imageOverlay slots', () => {
+  it('renders emptyState container when no src is provided', () => {
+    render(
+      <InstantPhotoImageEditor emptyState={<div data-testid="empty-slot">Upload a photo</div>} />
+    )
+    expect(document.querySelector('.ipf-empty-state')).toBeInTheDocument()
+    expect(document.querySelector('[data-testid="empty-slot"]')).toBeInTheDocument()
+  })
+
+  it('does not render emptyState container when src is provided', () => {
+    render(
+      <InstantPhotoImageEditor
+        src="test.jpg"
+        emptyState={<div data-testid="empty-slot">Upload a photo</div>}
+      />
+    )
+    expect(document.querySelector('.ipf-empty-state')).not.toBeInTheDocument()
+  })
+
+  it('renders imageOverlay container when src is provided', () => {
+    render(<InstantPhotoImageEditor src="test.jpg" imageOverlay={<button>Delete</button>} />)
+    expect(document.querySelector('.ipf-image-overlay')).toBeInTheDocument()
+  })
+
+  it('does not render imageOverlay container when no src', () => {
+    render(<InstantPhotoImageEditor imageOverlay={<button>Delete</button>} />)
+    expect(document.querySelector('.ipf-image-overlay')).not.toBeInTheDocument()
+  })
+
+  it('does not render emptyState container when emptyState prop is not provided', () => {
+    render(<InstantPhotoImageEditor />)
+    expect(document.querySelector('.ipf-empty-state')).not.toBeInTheDocument()
+  })
+})
+
+describe('InstantPhotoEditor', () => {
+  it('renders without props', () => {
+    render(<InstantPhotoEditor />)
+    expect(document.querySelector('.ipf-frame')).toBeInTheDocument()
+  })
+
+  it('renders upload button when onUpload is provided', () => {
+    render(<InstantPhotoEditor onUpload={vi.fn()} />)
+    expect(document.querySelector('.ipf-upload-btn')).toBeInTheDocument()
+  })
+
+  it('does not render upload button when onUpload is not provided', () => {
+    render(<InstantPhotoEditor />)
+    expect(document.querySelector('.ipf-upload-btn')).not.toBeInTheDocument()
+  })
+
+  it('renders delete button when onDelete and src are provided', () => {
+    render(<InstantPhotoEditor src="test.jpg" onDelete={vi.fn()} />)
+    expect(document.querySelector('.ipf-delete-btn')).toBeInTheDocument()
+  })
+
+  it('does not render delete button when src is absent', () => {
+    render(<InstantPhotoEditor onDelete={vi.fn()} />)
+    expect(document.querySelector('.ipf-delete-btn')).not.toBeInTheDocument()
+  })
+
+  it('calls onDelete when delete button is clicked', () => {
+    const onDelete = vi.fn()
+    render(<InstantPhotoEditor src="test.jpg" onDelete={onDelete} />)
+    const btn = document.querySelector('.ipf-delete-btn') as HTMLElement
+    btn.click()
+    expect(onDelete).toHaveBeenCalledOnce()
+  })
+
+  it('renders a hidden file input when onUpload is provided', () => {
+    render(<InstantPhotoEditor onUpload={vi.fn()} />)
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement
+    expect(input).toBeInTheDocument()
+    expect(input.style.display).toBe('none')
+  })
+
+  it('uses custom accept attribute on the file input', () => {
+    render(<InstantPhotoEditor onUpload={vi.fn()} accept="image/png,image/jpeg" />)
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement
+    expect(input.accept).toBe('image/png,image/jpeg')
   })
 })
 

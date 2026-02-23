@@ -1,0 +1,1 @@
+export { InstantPhotoEditor } from './InstantPhotoEditor'

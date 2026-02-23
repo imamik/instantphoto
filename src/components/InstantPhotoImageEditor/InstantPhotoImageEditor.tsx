@@ -29,6 +29,8 @@ import type {
 
 export function InstantPhotoImageEditor({
   src,
+  emptyState,
+  imageOverlay,
   frameType = 'polaroid_600',
   filmType = 'polaroid',
   grainAmount,
@@ -290,6 +292,8 @@ export function InstantPhotoImageEditor({
           tabIndex={0}
           aria-label="Image editor — drag to pan, scroll or pinch to zoom, arrow keys to nudge, +/- to zoom, R to reset, Ctrl+Z to undo"
         />
+        {!src && emptyState && <div className="ipf-empty-state">{emptyState}</div>}
+        {src && imageOverlay && <div className="ipf-image-overlay">{imageOverlay}</div>}
       </div>
     </div>
   )

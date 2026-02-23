@@ -4,6 +4,7 @@
 
 export { InstantPhotoFrame } from './components/InstantPhotoFrame'
 export { InstantPhotoImageEditor } from './components/InstantPhotoImageEditor'
+export { InstantPhotoEditor } from './components/InstantPhotoEditor'
 
 export { FRAME_SPECS, FILM_PROFILES, PRINT_DPI, getFrameInsets } from './presets/profiles'
 
@@ -29,4 +30,5 @@ export type {
   // Components
   InstantPhotoFrameProps,
   InstantPhotoImageEditorProps,
+  InstantPhotoEditorProps,
 } from './types'

@@ -703,12 +703,41 @@ export const ErrorState: Story = {
 // ---------------------------------------------------------------------------
 
 export const PlaceholderState: Story = {
-  name: '⏳ Placeholder (no image)',
+  name: '⏳ Placeholder + emptyState slot',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
-      <InstantPhotoImageEditor width={320} />
+      <InstantPhotoImageEditor
+        width={320}
+        emptyState={
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.4em',
+              color: 'rgba(255,255,255,0.7)',
+              fontSize: '0.85rem',
+            }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width={32}
+              height={32}
+            >
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+            Upload a photo
+          </div>
+        }
+      />
       <div style={{ fontSize: 12, color: '#aaa', fontStyle: 'italic' }}>
-        Editor with no src — shows blank frame
+        Editor with no src — custom emptyState slot
       </div>
     </div>
   ),

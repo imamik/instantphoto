@@ -125,6 +125,34 @@ function Editor() {
 }
 ```
 
+### `<InstantPhotoEditor>`
+
+Higher-level convenience component that wraps `InstantPhotoImageEditor` and wires up a built-in upload button (shown when no image is loaded) and a delete button (shown as an overlay when an image is loaded).
+
+```tsx
+import { useState } from 'react'
+import { InstantPhotoEditor } from '@instantphoto/react'
+import '@instantphoto/react/styles.css'
+
+function App() {
+  const [src, setSrc] = useState<string>()
+
+  return (
+    <InstantPhotoEditor
+      src={src}
+      frameType="polaroid_600"
+      width={400}
+      onUpload={file => setSrc(URL.createObjectURL(file))}
+      onDelete={() => setSrc(undefined)}
+    />
+  )
+}
+```
+
+- When `onUpload` is provided and `src` is not set, a camera-icon upload button is centred inside the frame.
+- When `onDelete` is provided and `src` is set, a circular × button appears in the top-right corner of the image.
+- All `InstantPhotoImageEditor` props (except `emptyState`/`imageOverlay`) are forwarded as-is.
+
 **Keyboard shortcuts** (click/focus the editor first):
 
 | Key | Action |
@@ -167,6 +195,8 @@ function Editor() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `emptyState` | `React.ReactNode` | — | Rendered centred inside the image area when `src` is not set. |
+| `imageOverlay` | `React.ReactNode` | — | Rendered on top of the photo when `src` is set. Wrapper has `pointer-events: none`; add `pointer-events: auto` to interactive children. |
 | `maxZoom` | `number` | `5` | Maximum zoom factor. |
 | `onRenderDelay` | `number` | `600` | Debounce ms before `onRender` fires after a gesture. |
 | `liveUpdateDuringGesture` | `boolean` | `true` | Full effects during drag (`true`) or raw preview (`false`). |
@@ -174,6 +204,16 @@ function Editor() {
 | `onSettingsChange` | `(settings: InstantPhotoSettings) => void` | — | Called when transform or effect params change. |
 | `onUndo` | `(transform: ImageTransform) => void` | — | Called after keyboard undo is applied. |
 | `onRedo` | `(transform: ImageTransform) => void` | — | Called after keyboard redo is applied. |
+
+### `InstantPhotoEditor`-only props
+
+Accepts all `InstantPhotoImageEditor` props (except `emptyState`/`imageOverlay`) plus:
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onUpload` | `(file: File) => void` | — | Called when the user picks a file. Shows an upload button when set. |
+| `onDelete` | `() => void` | — | Called when the delete overlay is clicked. Shows a delete button when set and `src` is provided. |
+| `accept` | `string` | `'image/*'` | `accept` attribute forwarded to the hidden file input. |
 
 ---
 
