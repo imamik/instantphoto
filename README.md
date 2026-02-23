@@ -1,5 +1,13 @@
 # @instantphoto/react
 
+[![CI](https://img.shields.io/github/actions/workflow/status/imamik/instantphoto/ci.yml?branch=main&label=CI&logo=github)](https://github.com/imamik/instantphoto/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@instantphoto/react?logo=npm&logoColor=white&color=cb0000)](https://www.npmjs.com/package/@instantphoto/react)
+[![Coverage](https://img.shields.io/codecov/c/github/imamik/instantphoto?logo=codecov&logoColor=white)](https://codecov.io/gh/imamik/instantphoto)
+[![Bundle size](https://img.shields.io/bundlephobia/minzip/@instantphoto/react?label=gzipped&color=22c55e)](https://bundlephobia.com/package/@instantphoto/react)
+[![License: MIT](https://img.shields.io/github/license/imamik/instantphoto)](https://github.com/imamik/instantphoto/blob/main/LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18%20%7C%2019-61dafb?logo=react&logoColor=white)](https://react.dev/)
+
 React component library for applying authentic **Polaroid 600** and **Fujifilm Instax** instant-film effects to images — entirely in the browser via WebGL.
 
 - Zero server dependency — runs 100% client-side
