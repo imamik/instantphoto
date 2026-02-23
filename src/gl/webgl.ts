@@ -70,7 +70,7 @@ function isRenderableTextureType(gl: WebGLRenderingContext, type: number): boole
     return false
   }
 
-  let ok = false
+  let ok: boolean
   try {
     gl.bindTexture(gl.TEXTURE_2D, texture)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)

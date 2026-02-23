@@ -126,33 +126,34 @@ export function PolaroidImageEditor({
   // -------------------------------------------------------------------------
   // GL hook: manages the WebGL pipeline, image loading, and imperative renders
   // -------------------------------------------------------------------------
-  const { renderFrame, renderRawFrame, scheduleOnRender, cancelOnRender, cropRef } = useInteractiveGL(
-    canvasRef,
-    src,
-    {
-      canvasSize: spec.canvasSize,
-      filmType,
-      imageAspect: insets.imageAspect,
-      imageCornerRadiusPx: getImageCornerRadiusPx(spec),
-      vignetteIntensity: resolvedVignette,
-      halationAmount: resolvedHalation,
-      grainAmount: resolvedGrain,
-      grainSizePx,
-      grainColorAmount,
-      chromaticShift: resolvedChromaticShift,
-      saturationDelta: resolvedSaturationDelta,
-      filmCurveAmount: resolvedFilmCurveAmount,
-      shadowWideIntensity: resolvedShadowWideIntensity,
-      shadowWideStart: resolvedShadowWideStart,
-      shadowWideEnd: resolvedShadowWideEnd,
-      shadowFineIntensity: resolvedShadowFineIntensity,
-      shadowFineStart: resolvedShadowFineStart,
-      shadowFineEnd: resolvedShadowFineEnd,
-      seed,
-    },
-    transformRef,
-    { onRender, onError, captureFn, onRenderDelay }
-  )
+  const { renderFrame, renderRawFrame, scheduleOnRender, cancelOnRender, cropRef } =
+    useInteractiveGL(
+      canvasRef,
+      src,
+      {
+        canvasSize: spec.canvasSize,
+        filmType,
+        imageAspect: insets.imageAspect,
+        imageCornerRadiusPx: getImageCornerRadiusPx(spec),
+        vignetteIntensity: resolvedVignette,
+        halationAmount: resolvedHalation,
+        grainAmount: resolvedGrain,
+        grainSizePx,
+        grainColorAmount,
+        chromaticShift: resolvedChromaticShift,
+        saturationDelta: resolvedSaturationDelta,
+        filmCurveAmount: resolvedFilmCurveAmount,
+        shadowWideIntensity: resolvedShadowWideIntensity,
+        shadowWideStart: resolvedShadowWideStart,
+        shadowWideEnd: resolvedShadowWideEnd,
+        shadowFineIntensity: resolvedShadowFineIntensity,
+        shadowFineStart: resolvedShadowFineStart,
+        shadowFineEnd: resolvedShadowFineEnd,
+        seed,
+      },
+      transformRef,
+      { onRender, onError, captureFn, onRenderDelay }
+    )
 
   // -------------------------------------------------------------------------
   // Undo/redo history

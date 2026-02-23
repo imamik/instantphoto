@@ -39,7 +39,7 @@ describe('computeCrop', () => {
 
   it('landscape source in wide target – matches when src/target same aspect', () => {
     // Source 4:3, target 4:3 – no crop
-    const { offset, scale } = computeCrop(400, 300, 4 / 3)
+    const { offset: _offset, scale } = computeCrop(400, 300, 4 / 3)
     expect(scale[0]).toBeCloseTo(1)
     expect(scale[1]).toBeCloseTo(1)
   })

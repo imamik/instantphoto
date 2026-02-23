@@ -30,8 +30,7 @@ global.createImageBitmap = async (source: ImageBitmapSource): Promise<ImageBitma
 // bypassing Vitest's console capture.  Filter it out at the stream level.
 // ---------------------------------------------------------------------------
 const _origStderrWrite = process.stderr.write.bind(process.stderr)
-// @ts-expect-error – overriding for test noise suppression
 process.stderr.write = (chunk: unknown, ...rest: unknown[]) => {
   if (typeof chunk === 'string' && chunk.includes('Not implemented')) return true
-  return _origStderrWrite(chunk, ...(rest as Parameters<typeof _origStderrWrite>))
+  return (_origStderrWrite as (...args: unknown[]) => boolean)(chunk, ...rest)
 }

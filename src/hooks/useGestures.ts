@@ -128,11 +128,7 @@ export function useGestures({
       return cropRef.current ?? { baseSX: 1, baseSY: 1 }
     }
 
-    function clampTransform(
-      t: ImageTransform,
-      baseSX: number,
-      baseSY: number
-    ): ImageTransform {
+    function clampTransform(t: ImageTransform, baseSX: number, baseSY: number): ImageTransform {
       const scale = clamp(t.scale, 1, maxZoomRef.current)
       const uvSX = baseSX / scale
       const uvSY = baseSY / scale

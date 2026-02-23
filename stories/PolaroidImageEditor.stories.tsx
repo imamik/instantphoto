@@ -280,203 +280,203 @@ function ImageEditorPanel() {
             gap: 14,
           }}
         >
-        <fieldset style={fieldsetStyle}>
-          <legend style={legendStyle}>Grain</legend>
-          <label style={sliderRowStyle}>
-            <span>
-              Grain: <strong>{grainAmount.toFixed(3)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={0.08}
-              step={0.001}
-              value={grainAmount}
-              onChange={e => setGrainAmount(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Grain size: <strong>{grainSizePx.toFixed(2)} px</strong>
-            </span>
-            <input
-              type="range"
-              min={0.8}
-              max={3.5}
-              step={0.01}
-              value={grainSizePx}
-              onChange={e => setGrainSizePx(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Grain color: <strong>{grainColorAmount.toFixed(2)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={grainColorAmount}
-              onChange={e => setGrainColorAmount(parseFloat(e.target.value))}
-            />
-          </label>
-        </fieldset>
+          <fieldset style={fieldsetStyle}>
+            <legend style={legendStyle}>Grain</legend>
+            <label style={sliderRowStyle}>
+              <span>
+                Grain: <strong>{grainAmount.toFixed(3)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={0.08}
+                step={0.001}
+                value={grainAmount}
+                onChange={e => setGrainAmount(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Grain size: <strong>{grainSizePx.toFixed(2)} px</strong>
+              </span>
+              <input
+                type="range"
+                min={0.8}
+                max={3.5}
+                step={0.01}
+                value={grainSizePx}
+                onChange={e => setGrainSizePx(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Grain color: <strong>{grainColorAmount.toFixed(2)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={grainColorAmount}
+                onChange={e => setGrainColorAmount(parseFloat(e.target.value))}
+              />
+            </label>
+          </fieldset>
 
-        <fieldset style={fieldsetStyle}>
-          <legend style={legendStyle}>Tone</legend>
-          <label style={sliderRowStyle}>
-            <span>
-              Halation: <strong>{halationAmount.toFixed(3)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={0.5}
-              step={0.005}
-              value={halationAmount}
-              onChange={e => setHalationAmount(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Vignette: <strong>{vignetteIntensity.toFixed(3)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={vignetteIntensity}
-              onChange={e => setVignetteIntensity(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Chromatic shift: <strong>{chromaticShift.toFixed(2)} px</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={4}
-              step={0.05}
-              value={chromaticShift}
-              onChange={e => setChromaticShift(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Film curve amount: <strong>{filmCurveAmount.toFixed(2)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={filmCurveAmount}
-              onChange={e => setFilmCurveAmount(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Saturation delta: <strong>{saturationDelta.toFixed(1)}</strong>
-            </span>
-            <input
-              type="range"
-              min={-40}
-              max={40}
-              step={0.5}
-              value={saturationDelta}
-              onChange={e => setSaturationDelta(parseFloat(e.target.value))}
-            />
-          </label>
-        </fieldset>
+          <fieldset style={fieldsetStyle}>
+            <legend style={legendStyle}>Tone</legend>
+            <label style={sliderRowStyle}>
+              <span>
+                Halation: <strong>{halationAmount.toFixed(3)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={0.5}
+                step={0.005}
+                value={halationAmount}
+                onChange={e => setHalationAmount(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Vignette: <strong>{vignetteIntensity.toFixed(3)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={vignetteIntensity}
+                onChange={e => setVignetteIntensity(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Chromatic shift: <strong>{chromaticShift.toFixed(2)} px</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={4}
+                step={0.05}
+                value={chromaticShift}
+                onChange={e => setChromaticShift(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Film curve amount: <strong>{filmCurveAmount.toFixed(2)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={filmCurveAmount}
+                onChange={e => setFilmCurveAmount(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Saturation delta: <strong>{saturationDelta.toFixed(1)}</strong>
+              </span>
+              <input
+                type="range"
+                min={-40}
+                max={40}
+                step={0.5}
+                value={saturationDelta}
+                onChange={e => setSaturationDelta(parseFloat(e.target.value))}
+              />
+            </label>
+          </fieldset>
 
-        <fieldset style={fieldsetStyle}>
-          <legend style={legendStyle}>Shadow Wide</legend>
-          <label style={sliderRowStyle}>
-            <span>
-              Shadow wide intensity: <strong>{shadowWideIntensity.toFixed(2)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={shadowWideIntensity}
-              onChange={e => setShadowWideIntensity(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Shadow wide start: <strong>{shadowWideStart.toFixed(3)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={0.2}
-              step={0.001}
-              value={shadowWideStart}
-              onChange={e => setShadowWideStart(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Shadow wide end: <strong>{shadowWideEnd.toFixed(3)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0.001}
-              max={0.3}
-              step={0.001}
-              value={shadowWideEnd}
-              onChange={e => setShadowWideEnd(parseFloat(e.target.value))}
-            />
-          </label>
-        </fieldset>
+          <fieldset style={fieldsetStyle}>
+            <legend style={legendStyle}>Shadow Wide</legend>
+            <label style={sliderRowStyle}>
+              <span>
+                Shadow wide intensity: <strong>{shadowWideIntensity.toFixed(2)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={shadowWideIntensity}
+                onChange={e => setShadowWideIntensity(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Shadow wide start: <strong>{shadowWideStart.toFixed(3)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={0.2}
+                step={0.001}
+                value={shadowWideStart}
+                onChange={e => setShadowWideStart(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Shadow wide end: <strong>{shadowWideEnd.toFixed(3)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0.001}
+                max={0.3}
+                step={0.001}
+                value={shadowWideEnd}
+                onChange={e => setShadowWideEnd(parseFloat(e.target.value))}
+              />
+            </label>
+          </fieldset>
 
-        <fieldset style={fieldsetStyle}>
-          <legend style={legendStyle}>Shadow Fine</legend>
-          <label style={sliderRowStyle}>
-            <span>
-              Shadow fine intensity: <strong>{shadowFineIntensity.toFixed(2)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={shadowFineIntensity}
-              onChange={e => setShadowFineIntensity(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Shadow fine start: <strong>{shadowFineStart.toFixed(4)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0}
-              max={0.05}
-              step={0.0005}
-              value={shadowFineStart}
-              onChange={e => setShadowFineStart(parseFloat(e.target.value))}
-            />
-          </label>
-          <label style={sliderRowStyle}>
-            <span>
-              Shadow fine end: <strong>{shadowFineEnd.toFixed(4)}</strong>
-            </span>
-            <input
-              type="range"
-              min={0.0005}
-              max={0.08}
-              step={0.0005}
-              value={shadowFineEnd}
-              onChange={e => setShadowFineEnd(parseFloat(e.target.value))}
-            />
-          </label>
-        </fieldset>
+          <fieldset style={fieldsetStyle}>
+            <legend style={legendStyle}>Shadow Fine</legend>
+            <label style={sliderRowStyle}>
+              <span>
+                Shadow fine intensity: <strong>{shadowFineIntensity.toFixed(2)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={shadowFineIntensity}
+                onChange={e => setShadowFineIntensity(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Shadow fine start: <strong>{shadowFineStart.toFixed(4)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={0.05}
+                step={0.0005}
+                value={shadowFineStart}
+                onChange={e => setShadowFineStart(parseFloat(e.target.value))}
+              />
+            </label>
+            <label style={sliderRowStyle}>
+              <span>
+                Shadow fine end: <strong>{shadowFineEnd.toFixed(4)}</strong>
+              </span>
+              <input
+                type="range"
+                min={0.0005}
+                max={0.08}
+                step={0.0005}
+                value={shadowFineEnd}
+                onChange={e => setShadowFineEnd(parseFloat(e.target.value))}
+              />
+            </label>
+          </fieldset>
         </div>
       </div>
 
@@ -732,23 +732,46 @@ function SettingsExportPanel() {
   }
 
   return (
-    <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start', maxWidth: 900 }}>
+    <div
+      style={{
+        display: 'flex',
+        gap: 20,
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        maxWidth: 900,
+      }}
+    >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
         <button
           onClick={() => fileInputRef.current?.click()}
-          style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #ddd', cursor: 'pointer' }}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 6,
+            border: '1px solid #ddd',
+            cursor: 'pointer',
+          }}
         >
           Upload photo
         </button>
-        <PolaroidImageEditor
-          src={src}
-          width={300}
-          onSettingsChange={setSettings}
-        />
+        <PolaroidImageEditor src={src} width={300} onSettingsChange={setSettings} />
       </div>
       <div style={{ flex: 1, minWidth: 280 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#888', marginBottom: 6 }}>
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            color: '#888',
+            marginBottom: 6,
+          }}
+        >
           Live settings snapshot (onSettingsChange)
         </div>
         <pre
@@ -762,7 +785,9 @@ function SettingsExportPanel() {
             margin: 0,
           }}
         >
-          {settings ? JSON.stringify(settings, null, 2) : '(change a setting or gesture to see output)'}
+          {settings
+            ? JSON.stringify(settings, null, 2)
+            : '(change a setting or gesture to see output)'}
         </pre>
       </div>
     </div>

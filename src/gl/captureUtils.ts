@@ -125,7 +125,14 @@ export function buildFrameCapture(
   // Clip the photo area to subtle rounded corners before compositing.
   ctx.save()
   ctx.beginPath()
-  drawRoundedRect(ctx, imageX + 0.5, imageY + 0.5, canvas.width - 1, canvas.height - 1, imageCornerR)
+  drawRoundedRect(
+    ctx,
+    imageX + 0.5,
+    imageY + 0.5,
+    canvas.width - 1,
+    canvas.height - 1,
+    imageCornerR
+  )
   ctx.clip()
   ctx.drawImage(canvas, imageX, imageY, canvas.width, canvas.height)
   ctx.restore()

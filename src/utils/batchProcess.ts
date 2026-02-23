@@ -52,12 +52,7 @@ export async function batchProcess(
   items: BatchItem[],
   options: BatchProcessOptions = {}
 ): Promise<Array<Blob | null>> {
-  const {
-    frameType = 'polaroid_600',
-    captureOptions = {},
-    onProgress,
-    glOptions = {},
-  } = options
+  const { frameType = 'polaroid_600', captureOptions = {}, onProgress, glOptions = {} } = options
 
   const spec = FRAME_SPECS[frameType]
   const insets = getFrameInsets(spec)
