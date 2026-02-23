@@ -1,6 +1,6 @@
 import type React from 'react'
 
-/** Supported Polaroid-style frame formats */
+/** Supported instant photo frame formats */
 export type FrameType = 'polaroid_600' | 'instax_mini' | 'instax_square' | 'instax_wide'
 
 /** Film emulsion characteristic to emulate */
@@ -41,7 +41,7 @@ export interface FilmProfile {
 }
 
 /** All options consumed by the WebGL render pipeline */
-export interface PolaroidGLOptions {
+export interface InstantPhotoGLOptions {
   filmType: FilmType
   /** Fixed canvas pixel dimensions at 300 DPI (from FrameSpec.canvasSize) */
   canvasSize: readonly [number, number]
@@ -78,7 +78,7 @@ export interface PolaroidGLOptions {
  * - `'image'` – the WebGL canvas only: just the film-effect photo, no border.
  *   Pixel dimensions equal `FrameSpec.canvasSize` (300 DPI).
  *
- * - `'frame'` – the full Polaroid card: white paper border + photo composited
+ * - `'frame'` – the full instant photo frame: white paper border + photo composited
  *   together on a single canvas, scaled to 300 DPI.  Useful for sharing or
  *   printing the authentic instant-film look including the white surround.
  */
@@ -91,7 +91,7 @@ export interface CaptureOptions {
   /**
    * What to capture.
    * - `'image'` (default) – film-effect canvas only, no border.
-   * - `'frame'` – full Polaroid card with white paper surround.
+   * - `'frame'` – full instant photo frame with white paper surround.
    */
   target?: CaptureTarget
   /** Output format. Defaults to `'image/png'`. */
@@ -104,7 +104,7 @@ export interface CaptureOptions {
 }
 
 /**
- * Stable function provided via `PolaroidFrameProps.onRender`.
+ * Stable function provided via `InstantPhotoFrameProps.onRender`.
  *
  * Call it at any time after the component has rendered to obtain the
  * processed image as a Blob.  The canvas is always at its 300 DPI
@@ -113,7 +113,7 @@ export interface CaptureOptions {
  * ```tsx
  * const [capture, setCapture] = useState<CaptureFn>()
  *
- * <PolaroidFrame src="photo.jpg" onRender={setCapture} />
+ * <InstantPhotoFrame src="photo.jpg" onRender={setCapture} />
  *
  * // Export the image area only (default):
  * const blob = await capture?.()
@@ -151,14 +151,14 @@ export interface ImageTransform {
 
 /**
  * A serialisable snapshot of all editor settings at a point in time.
- * Returned by `onSettingsChange` on `PolaroidImageEditor`.
+ * Returned by `onSettingsChange` on `InstantPhotoImageEditor`.
  *
  * ```ts
  * // Embed alongside an exported image:
  * const meta = JSON.stringify(settings, null, 2)
  * ```
  */
-export interface PolaroidSettings {
+export interface InstantPhotoSettings {
   frameType: FrameType
   filmType: FilmType
   transform: ImageTransform
@@ -183,8 +183,8 @@ export interface PolaroidSettings {
 // Component props
 // ---------------------------------------------------------------------------
 
-/** Props for the PolaroidFrame component */
-export interface PolaroidFrameProps {
+/** Props for the InstantPhotoFrame component */
+export interface InstantPhotoFrameProps {
   /**
    * Image source. Accepts a URL string, an already-loaded HTMLImageElement,
    * or a decoded ImageBitmap.
@@ -227,7 +227,7 @@ export interface PolaroidFrameProps {
    * `0` (default) picks a random seed on every render.
    */
   seed?: number
-  /** CSS width of the entire Polaroid frame. Defaults to `'100%'`. */
+  /** CSS width of the frame. Defaults to `'100%'`. */
   width?: number | string
   className?: string
   style?: React.CSSProperties
@@ -238,7 +238,7 @@ export interface PolaroidFrameProps {
    *
    * ```tsx
    * const [capture, setCapture] = useState<CaptureFn>()
-   * <PolaroidFrame src={src} onRender={setCapture} />
+   * <InstantPhotoFrame src={src} onRender={setCapture} />
    *
    * <button onClick={() => capture?.().then(saveFile)}>
    *   Download image
@@ -253,8 +253,8 @@ export interface PolaroidFrameProps {
   onError?: (error: Error) => void
 }
 
-/** Props for the PolaroidImageEditor component */
-export interface PolaroidImageEditorProps {
+/** Props for the InstantPhotoImageEditor component */
+export interface InstantPhotoImageEditorProps {
   /**
    * Image source.  Optional — the editor renders a placeholder until an image
    * is provided (useful for file-upload flows where src starts undefined).
@@ -313,7 +313,7 @@ export interface PolaroidImageEditorProps {
    *   smoother on low-end/mobile devices).
    */
   liveUpdateDuringGesture?: boolean
-  /** CSS width of the entire Polaroid frame. Defaults to `'100%'`. */
+  /** CSS width of the frame. Defaults to `'100%'`. */
   width?: number | string
   className?: string
   style?: React.CSSProperties
@@ -335,10 +335,10 @@ export interface PolaroidImageEditorProps {
    * or embedded as metadata alongside an exported image.
    *
    * ```ts
-   * <PolaroidImageEditor onSettingsChange={s => console.log(JSON.stringify(s))} />
+   * <InstantPhotoImageEditor onSettingsChange={s => console.log(JSON.stringify(s))} />
    * ```
    */
-  onSettingsChange?: (settings: PolaroidSettings) => void
+  onSettingsChange?: (settings: InstantPhotoSettings) => void
   /**
    * Called after the editor performs a keyboard undo (Ctrl+Z / Cmd+Z).
    * The editor has already applied the undo internally; this callback lets

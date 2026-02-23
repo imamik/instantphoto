@@ -12,11 +12,11 @@ const TINY_PNG = Buffer.from(
   'base64',
 )
 
-test.describe('PolaroidImageEditor', () => {
+test.describe('InstantPhotoImageEditor', () => {
   test('renders frame and gesture overlay without a source image', async ({ page }) => {
     await page.goto(STORY_URL)
-    await expect(page.locator('.plrd-frame--editor')).toBeVisible()
-    await expect(page.locator('.plrd-gesture-overlay')).toBeVisible()
+    await expect(page.locator('.ipf-frame--editor')).toBeVisible()
+    await expect(page.locator('.ipf-gesture-overlay')).toBeVisible()
   })
 
   test('shows upload prompt when no image is loaded', async ({ page }) => {
@@ -80,16 +80,16 @@ test.describe('PolaroidImageEditor', () => {
 
     // Record initial canvas dimensions
     const initialAspect = await page
-      .locator('.plrd-frame')
-      .evaluate(el => getComputedStyle(el).getPropertyValue('--plrd-frame-aspect').trim())
+      .locator('.ipf-frame')
+      .evaluate(el => getComputedStyle(el).getPropertyValue('--ipf-frame-aspect').trim())
 
     // Switch to Instax Mini
     await page.getByRole('radio', { name: /instax mini/i }).click()
 
     // Frame aspect ratio CSS var should change
     const newAspect = await page
-      .locator('.plrd-frame')
-      .evaluate(el => getComputedStyle(el).getPropertyValue('--plrd-frame-aspect').trim())
+      .locator('.ipf-frame')
+      .evaluate(el => getComputedStyle(el).getPropertyValue('--ipf-frame-aspect').trim())
 
     expect(newAspect).not.toBe(initialAspect)
   })

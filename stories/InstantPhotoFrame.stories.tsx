@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import {
-  PolaroidFrame,
+  InstantPhotoFrame,
   FRAME_SPECS,
   PRINT_DPI,
   type CaptureFn,
@@ -32,9 +32,9 @@ const DISPLAY_WIDTHS: Record<FrameType, number> = {
 // ---------------------------------------------------------------------------
 // Storybook meta
 // ---------------------------------------------------------------------------
-const meta: Meta<typeof PolaroidFrame> = {
-  title: 'Components/PolaroidFrame',
-  component: PolaroidFrame,
+const meta: Meta<typeof InstantPhotoFrame> = {
+  title: 'Components/InstantPhotoFrame',
+  component: InstantPhotoFrame,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
@@ -74,7 +74,7 @@ const meta: Meta<typeof PolaroidFrame> = {
   },
 }
 export default meta
-type Story = StoryObj<typeof PolaroidFrame>
+type Story = StoryObj<typeof InstantPhotoFrame>
 
 // ---------------------------------------------------------------------------
 // Individual format stories
@@ -132,7 +132,7 @@ export const AllFormats: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start', flexWrap: 'wrap' }}>
       {(Object.keys(IMGS) as FrameType[]).map(ft => (
-        <PolaroidFrame key={ft} src={IMGS[ft]} frameType={ft} width={DISPLAY_WIDTHS[ft]} />
+        <InstantPhotoFrame key={ft} src={IMGS[ft]} frameType={ft} width={DISPLAY_WIDTHS[ft]} />
       ))}
     </div>
   ),
@@ -216,7 +216,7 @@ function ExportPlaygroundPanel() {
       }}
     >
       {/* ── Preview ── */}
-      <PolaroidFrame
+      <InstantPhotoFrame
         key={frameKey}
         src={IMGS[frameType]}
         frameType={frameType}
@@ -392,7 +392,7 @@ function ErrorStatePanel() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
-      <PolaroidFrame
+      <InstantPhotoFrame
         src="https://this-domain-does-not-exist.invalid/image.jpg"
         width={280}
         onError={err => setErrorMsg(err.message)}

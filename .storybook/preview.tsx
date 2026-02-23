@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react'
-import '../src/components/PolaroidFrame/PolaroidFrame.css'
+import '../src/components/InstantPhotoFrame/InstantPhotoFrame.css'
 
 const preview: Preview = {
   parameters: {

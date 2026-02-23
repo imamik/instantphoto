@@ -10,8 +10,8 @@ React component library for applying authentic Polaroid 600 and Fujifilm Instax 
 
 #### Features
 
-- `PolaroidFrame` — zero-config WebGL frame renderer with Polaroid 600 and Fujifilm Instax Mini/Square profiles
-- `PolaroidImageEditor` — interactive editor with pan, pinch-to-zoom, scroll zoom, keyboard shortcuts, and undo/redo
+- `InstantPhotoFrame` — zero-config WebGL frame renderer with Polaroid 600 and Fujifilm Instax Mini/Square profiles
+- `InstantPhotoImageEditor` — interactive editor with pan, pinch-to-zoom, scroll zoom, keyboard shortcuts, and undo/redo
 - `captureFrame` / `batchProcess` — programmatic capture API with 300 DPI print-ready export
 - `useGestures` — composable gesture hook (pointer, wheel, keyboard)
 - Full TypeScript types with strict null-safety

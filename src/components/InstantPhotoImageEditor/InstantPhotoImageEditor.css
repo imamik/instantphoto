@@ -1,12 +1,12 @@
 /* ---------------------------------------------------------------------------
- * @instantphoto/react – PolaroidImageEditor additional styles
+ * @instantphoto/react – InstantPhotoImageEditor additional styles
  *
- * The editor reuses all .plrd-frame / .plrd-image-wrap / .plrd-canvas rules
- * from PolaroidFrame.css.  This file adds only the gesture overlay.
+ * The editor reuses all .ipf-frame / .ipf-image-wrap / .ipf-canvas rules
+ * from InstantPhotoFrame.css.  This file adds only the gesture overlay.
  * -------------------------------------------------------------------------- */
 
 /* Invisible overlay that captures all pointer/wheel input over the canvas */
-.plrd-gesture-overlay {
+.ipf-gesture-overlay {
   position: absolute;
   inset: 0;
   cursor: grab;
@@ -14,6 +14,6 @@
   touch-action: none;
 }
 
-.plrd-gesture-overlay:active {
+.ipf-gesture-overlay:active {
   cursor: grabbing;
 }

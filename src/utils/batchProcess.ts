@@ -6,7 +6,7 @@
 // on completion or error.
 // ---------------------------------------------------------------------------
 
-import type { CaptureOptions, ExportFormat, FrameType, PolaroidGLOptions } from '../types'
+import type { CaptureOptions, ExportFormat, FrameType, InstantPhotoGLOptions } from '../types'
 import { FRAME_SPECS, getFrameInsets } from '../presets/profiles'
 import { createPipeline, destroyPipeline, render } from '../gl/pipeline'
 import { loadImageBitmap } from './loadImageBitmap'
@@ -29,7 +29,7 @@ export interface BatchProcessOptions {
    */
   onProgress?: (completed: number, total: number) => void
   /** WebGL effect overrides applied to every item (filmType, grain, vignette, etc.). */
-  glOptions?: Partial<Omit<PolaroidGLOptions, 'canvasSize' | 'imageAspect'>>
+  glOptions?: Partial<Omit<InstantPhotoGLOptions, 'canvasSize' | 'imageAspect'>>
 }
 
 /**
@@ -64,7 +64,7 @@ export async function batchProcess(
   const pipeline = createPipeline(canvas)
   if (!pipeline) throw new Error('[batchProcess] WebGL is not available in this environment')
 
-  const glFullOptions: PolaroidGLOptions = {
+  const glFullOptions: InstantPhotoGLOptions = {
     canvasSize: spec.canvasSize,
     imageAspect: insets.imageAspect,
     filmType: 'polaroid',

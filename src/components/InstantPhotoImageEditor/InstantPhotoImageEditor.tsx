@@ -1,5 +1,5 @@
-import '../PolaroidFrame/PolaroidFrame.css'
-import './PolaroidImageEditor.css'
+import '../InstantPhotoFrame/InstantPhotoFrame.css'
+import './InstantPhotoImageEditor.css'
 
 import { useCallback, useEffect, useRef } from 'react'
 
@@ -19,15 +19,15 @@ import type {
   CaptureOptions,
   CaptureFn,
   ImageTransform,
-  PolaroidImageEditorProps,
-  PolaroidSettings,
+  InstantPhotoImageEditorProps,
+  InstantPhotoSettings,
 } from '../../types'
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
-export function PolaroidImageEditor({
+export function InstantPhotoImageEditor({
   src,
   frameType = 'polaroid_600',
   filmType = 'polaroid',
@@ -58,7 +58,7 @@ export function PolaroidImageEditor({
   onSettingsChange,
   onUndo,
   onRedo,
-}: PolaroidImageEditorProps) {
+}: InstantPhotoImageEditorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const transformRef = useRef<ImageTransform>({ panX: 0, panY: 0, scale: 1 })
@@ -218,7 +218,7 @@ export function PolaroidImageEditor({
   // Emit onSettingsChange whenever transform or effect params change
   // -------------------------------------------------------------------------
   useEffect(() => {
-    const settings: PolaroidSettings = {
+    const settings: InstantPhotoSettings = {
       frameType,
       filmType,
       transform: { ...transformRef.current },
@@ -261,32 +261,32 @@ export function PolaroidImageEditor({
 
   // CSS custom properties that drive frame layout and paper styling
   const frameVars: React.CSSProperties = {
-    '--plrd-frame-aspect': insets.frameAspect,
-    '--plrd-paper-color': spec.paperColor,
-    '--plrd-corner-radius': `${spec.cornerRadius}px`,
-    '--plrd-shadow': spec.shadow,
-    '--plrd-inset-top': insets.top,
-    '--plrd-inset-left': insets.left,
-    '--plrd-inset-right': insets.right,
-    '--plrd-inset-bottom': insets.bottom,
-    '--plrd-image-corner-radius': `${getImageDisplayCornerRadiusPx(spec)}px`,
+    '--ipf-frame-aspect': insets.frameAspect,
+    '--ipf-paper-color': spec.paperColor,
+    '--ipf-corner-radius': `${spec.cornerRadius}px`,
+    '--ipf-shadow': spec.shadow,
+    '--ipf-inset-top': insets.top,
+    '--ipf-inset-left': insets.left,
+    '--ipf-inset-right': insets.right,
+    '--ipf-inset-bottom': insets.bottom,
+    '--ipf-image-corner-radius': `${getImageDisplayCornerRadiusPx(spec)}px`,
     width: typeof fittedWidth === 'number' ? `${fittedWidth}px` : fittedWidth,
   } as React.CSSProperties
 
   return (
     <div
       ref={frameRef}
-      className={`plrd-frame plrd-frame--editor${className ? ` ${className}` : ''}`}
+      className={`ipf-frame ipf-frame--editor${className ? ` ${className}` : ''}`}
       style={{ ...frameVars, ...style }}
       data-frame-type={frameType}
       data-film-type={filmType}
     >
-      <div className="plrd-image-wrap">
-        <canvas ref={canvasRef} className="plrd-canvas" />
+      <div className="ipf-image-wrap">
+        <canvas ref={canvasRef} className="ipf-canvas" />
         {/* tabIndex="0" makes the overlay keyboard-focusable for arrow/zoom/undo shortcuts */}
         <div
           ref={overlayRef}
-          className="plrd-gesture-overlay"
+          className="ipf-gesture-overlay"
           tabIndex={0}
           aria-label="Image editor — drag to pan, scroll or pinch to zoom, arrow keys to nudge, +/- to zoom, R to reset, Ctrl+Z to undo"
         />

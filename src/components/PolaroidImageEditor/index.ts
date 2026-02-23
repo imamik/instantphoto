@@ -1,1 +1,0 @@
-export { PolaroidImageEditor } from './PolaroidImageEditor'

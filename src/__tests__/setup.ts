@@ -23,7 +23,7 @@ global.createImageBitmap = async (source: ImageBitmapSource): Promise<ImageBitma
 
 // ---------------------------------------------------------------------------
 // HTMLCanvasElement.getContext('webgl') – returns null in jsdom, which
-// causes PolaroidFrame/PolaroidImageEditor to call onError.  That is the
+// causes InstantPhotoFrame/InstantPhotoImageEditor to call onError.  That is the
 // correct behaviour we test; no full WebGL mock is needed here.
 //
 // jsdom writes "Not implemented: getContext()" directly to process.stderr,

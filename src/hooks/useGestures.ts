@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Pointer / wheel / pinch gesture hook for PolaroidImageEditor.
+// Pointer / wheel / pinch gesture hook for InstantPhotoImageEditor.
 //
 // All gesture math operates in UV space so the image follows the
 // finger/cursor exactly. React is never involved in the gesture hot path —

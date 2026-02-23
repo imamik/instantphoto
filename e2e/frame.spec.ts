@@ -12,7 +12,7 @@ const TINY_PNG = Buffer.from(
   'base64',
 )
 
-test.describe('PolaroidFrame', () => {
+test.describe('InstantPhotoFrame', () => {
   test.beforeEach(async ({ page }) => {
     // Intercept remote images so the test is fully offline
     await page.route('**/picsum.photos/**', route =>
@@ -20,19 +20,19 @@ test.describe('PolaroidFrame', () => {
     )
   })
 
-  test('renders .plrd-frame container', async ({ page }) => {
+  test('renders .ipf-frame container', async ({ page }) => {
     await page.goto(STORY_URL)
-    await expect(page.locator('.plrd-frame')).toBeVisible()
+    await expect(page.locator('.ipf-frame')).toBeVisible()
   })
 
   test('renders a <canvas> element', async ({ page }) => {
     await page.goto(STORY_URL)
-    await expect(page.locator('canvas.plrd-canvas')).toBeVisible()
+    await expect(page.locator('canvas.ipf-canvas')).toBeVisible()
   })
 
   test('canvas has non-zero dimensions', async ({ page }) => {
     await page.goto(STORY_URL)
-    const box = await page.locator('canvas.plrd-canvas').boundingBox()
+    const box = await page.locator('canvas.ipf-canvas').boundingBox()
     expect(box).not.toBeNull()
     expect(box!.width).toBeGreaterThan(0)
     expect(box!.height).toBeGreaterThan(0)
@@ -40,8 +40,8 @@ test.describe('PolaroidFrame', () => {
 
   test('frame has correct CSS aspect-ratio custom property', async ({ page }) => {
     await page.goto(STORY_URL)
-    const frameAspect = await page.locator('.plrd-frame').evaluate(el =>
-      getComputedStyle(el).getPropertyValue('--plrd-frame-aspect').trim(),
+    const frameAspect = await page.locator('.ipf-frame').evaluate(el =>
+      getComputedStyle(el).getPropertyValue('--ipf-frame-aspect').trim(),
     )
     // polaroid_600 totalSize = 1080 × 1296 → "1080 / 1296"
     expect(frameAspect).toBe('1080 / 1296')
@@ -51,7 +51,7 @@ test.describe('PolaroidFrame', () => {
     await page.goto(STORY_URL)
     // The canvas is physically sized to 300 DPI; CSS scales it visually.
     const canvasW = await page
-      .locator('canvas.plrd-canvas')
+      .locator('canvas.ipf-canvas')
       .evaluate((el: HTMLCanvasElement) => el.width)
     expect(canvasW).toBe(933)
   })

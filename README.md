@@ -29,11 +29,11 @@ bun add react react-dom   # ^18 or ^19
 ## Quick start
 
 ```tsx
-import { PolaroidFrame } from '@instantphoto/react'
+import { InstantPhotoFrame } from '@instantphoto/react'
 import '@instantphoto/react/styles.css'
 
 export function App() {
-  return <PolaroidFrame src="/my-photo.jpg" />
+  return <InstantPhotoFrame src="/my-photo.jpg" />
 }
 ```
 
@@ -41,13 +41,13 @@ export function App() {
 
 ## Components
 
-### `<PolaroidFrame>`
+### `<InstantPhotoFrame>`
 
 Static display component — renders a photo with film effects on a Polaroid/Instax card. No interactive pan/zoom.
 
 ```tsx
 import { useState } from 'react'
-import { PolaroidFrame, type CaptureFn } from '@instantphoto/react'
+import { InstantPhotoFrame, type CaptureFn } from '@instantphoto/react'
 import '@instantphoto/react/styles.css'
 
 function PhotoCard() {
@@ -55,7 +55,7 @@ function PhotoCard() {
 
   return (
     <>
-      <PolaroidFrame
+      <InstantPhotoFrame
         src="/photo.jpg"
         frameType="polaroid_600"
         filmType="polaroid"
@@ -76,25 +76,25 @@ function PhotoCard() {
 }
 ```
 
-### `<PolaroidImageEditor>`
+### `<InstantPhotoImageEditor>`
 
 Interactive editor with pan, pinch-to-zoom, scroll zoom, keyboard shortcuts, and undo/redo.
 
 ```tsx
 import { useState } from 'react'
-import { PolaroidImageEditor, type CaptureFn, type PolaroidSettings } from '@instantphoto/react'
+import { InstantPhotoImageEditor, type CaptureFn, type InstantPhotoSettings } from '@instantphoto/react'
 import '@instantphoto/react/styles.css'
 
 function Editor() {
   const [src, setSrc] = useState<string>()
   const [capture, setCapture] = useState<CaptureFn>()
-  const [settings, setSettings] = useState<PolaroidSettings>()
+  const [settings, setSettings] = useState<InstantPhotoSettings>()
 
   return (
     <>
       <input type="file" onChange={e => setSrc(URL.createObjectURL(e.target.files![0]))} />
 
-      <PolaroidImageEditor
+      <InstantPhotoImageEditor
         src={src}
         frameType="polaroid_600"
         filmType="polaroid"
@@ -132,11 +132,11 @@ function Editor() {
 
 ## Props
 
-### Shared props (`PolaroidFrame` and `PolaroidImageEditor`)
+### Shared props (`InstantPhotoFrame` and `InstantPhotoImageEditor`)
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `src` | `string \| HTMLImageElement \| ImageBitmap` | — | Image source. `PolaroidImageEditor` makes this optional. |
+| `src` | `string \| HTMLImageElement \| ImageBitmap` | — | Image source. `InstantPhotoImageEditor` makes this optional. |
 | `frameType` | `FrameType` | `'polaroid_600'` | Frame format. |
 | `filmType` | `FilmType` | `'polaroid'` | Film emulsion profile. |
 | `grainAmount` | `number` | film default | Grain intensity 0–1. |
@@ -155,7 +155,7 @@ function Editor() {
 | `onRender` | `(capture: CaptureFn) => void` | — | Called after each render with a capture function. |
 | `onError` | `(error: Error) => void` | — | Called on WebGL or image loading errors. |
 
-### `PolaroidImageEditor`-only props
+### `InstantPhotoImageEditor`-only props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -163,7 +163,7 @@ function Editor() {
 | `onRenderDelay` | `number` | `600` | Debounce ms before `onRender` fires after a gesture. |
 | `liveUpdateDuringGesture` | `boolean` | `true` | Full effects during drag (`true`) or raw preview (`false`). |
 | `onTransformChange` | `(transform: ImageTransform) => void` | — | Called on every gesture event with updated pan/zoom. |
-| `onSettingsChange` | `(settings: PolaroidSettings) => void` | — | Called when transform or effect params change. |
+| `onSettingsChange` | `(settings: InstantPhotoSettings) => void` | — | Called when transform or effect params change. |
 | `onUndo` | `(transform: ImageTransform) => void` | — | Called after keyboard undo is applied. |
 | `onRedo` | `(transform: ImageTransform) => void` | — | Called after keyboard redo is applied. |
 
@@ -208,7 +208,7 @@ interface CaptureOptions {
 // Export just the photo at 300 DPI:
 const blob = await capture()
 
-// Export the full Polaroid card (white border included):
+// Export the full frame (white border included):
 const blob = await capture({ target: 'frame', format: 'image/jpeg', quality: 0.9 })
 ```
 
@@ -236,13 +236,13 @@ const blobs = await batchProcess(
 
 ## Settings export
 
-`PolaroidSettings` is a serialisable snapshot of all editor parameters at a point in time. Use it to persist or restore editor state, or embed it alongside an exported image:
+`InstantPhotoSettings` is a serialisable snapshot of all editor parameters at a point in time. Use it to persist or restore editor state, or embed it alongside an exported image:
 
 ```ts
-import type { PolaroidSettings } from '@instantphoto/react'
+import type { InstantPhotoSettings } from '@instantphoto/react'
 
-<PolaroidImageEditor
-  onSettingsChange={(settings: PolaroidSettings) => {
+<InstantPhotoImageEditor
+  onSettingsChange={(settings: InstantPhotoSettings) => {
     localStorage.setItem('editor-settings', JSON.stringify(settings))
   }}
 />

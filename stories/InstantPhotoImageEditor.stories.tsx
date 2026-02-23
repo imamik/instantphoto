@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import {
   FILM_PROFILES,
-  PolaroidImageEditor,
+  InstantPhotoImageEditor,
   FRAME_SPECS,
   PRINT_DPI,
   type CaptureFn,
@@ -11,21 +11,21 @@ import {
   type FilmType,
   type FrameType,
   type ImageTransform,
-  type PolaroidSettings,
+  type InstantPhotoSettings,
 } from '../src'
 
 // ---------------------------------------------------------------------------
 // Storybook meta
 // ---------------------------------------------------------------------------
 
-const meta: Meta<typeof PolaroidImageEditor> = {
-  title: 'Components/PolaroidImageEditor',
-  component: PolaroidImageEditor,
+const meta: Meta<typeof InstantPhotoImageEditor> = {
+  title: 'Components/InstantPhotoImageEditor',
+  component: InstantPhotoImageEditor,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
 }
 export default meta
-type Story = StoryObj<typeof PolaroidImageEditor>
+type Story = StoryObj<typeof InstantPhotoImageEditor>
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -164,7 +164,7 @@ function ImageEditorPanel() {
       <div style={topSplitStyle}>
         <div style={previewColumnStyle}>
           <div style={previewSurfaceStyle}>
-            <PolaroidImageEditor
+            <InstantPhotoImageEditor
               key={editorKey}
               src={src}
               frameType={frameType}
@@ -659,7 +659,7 @@ function ErrorStatePanel() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
-      <PolaroidImageEditor
+      <InstantPhotoImageEditor
         src="https://this-domain-does-not-exist.invalid/image.jpg"
         width={320}
         onError={err => setErrorMsg(err.message)}
@@ -706,7 +706,7 @@ export const PlaceholderState: Story = {
   name: '⏳ Placeholder (no image)',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
-      <PolaroidImageEditor width={320} />
+      <InstantPhotoImageEditor width={320} />
       <div style={{ fontSize: 12, color: '#aaa', fontStyle: 'italic' }}>
         Editor with no src — shows blank frame
       </div>
@@ -721,7 +721,7 @@ export const PlaceholderState: Story = {
 
 function SettingsExportPanel() {
   const [src, setSrc] = useState<string | undefined>()
-  const [settings, setSettings] = useState<PolaroidSettings | null>(null)
+  const [settings, setSettings] = useState<InstantPhotoSettings | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -760,7 +760,7 @@ function SettingsExportPanel() {
         >
           Upload photo
         </button>
-        <PolaroidImageEditor src={src} width={300} onSettingsChange={setSettings} />
+        <InstantPhotoImageEditor src={src} width={300} onSettingsChange={setSettings} />
       </div>
       <div style={{ flex: 1, minWidth: 280 }}>
         <div

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Shared async image loader used by both usePolaroidGL and useInteractiveGL.
+// Shared async image loader used by both useInstantPhotoGL and useInteractiveGL.
 // Accepts a URL string, HTMLImageElement, or already-decoded ImageBitmap.
 // ---------------------------------------------------------------------------
 

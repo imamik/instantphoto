@@ -16,7 +16,7 @@
 
 import { useEffect, useLayoutEffect, useRef } from 'react'
 
-import type { CaptureFn, PolaroidGLOptions } from '../types'
+import type { CaptureFn, InstantPhotoGLOptions } from '../types'
 import { createPipeline, destroyPipeline, render, type Pipeline } from '../gl/pipeline'
 import { loadImageBitmap } from '../utils/loadImageBitmap'
 
@@ -24,10 +24,10 @@ import { loadImageBitmap } from '../utils/loadImageBitmap'
 // Hook
 // ---------------------------------------------------------------------------
 
-export function usePolaroidGL(
+export function useInstantPhotoGL(
   canvasRef: React.RefObject<HTMLCanvasElement | null>,
   src: string | HTMLImageElement | ImageBitmap,
-  options: PolaroidGLOptions,
+  options: InstantPhotoGLOptions,
   callbacks: {
     onRender?: (capture: CaptureFn) => void
     onError?: (err: Error) => void

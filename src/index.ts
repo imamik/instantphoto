@@ -2,8 +2,8 @@
 // @instantphoto/react – public API
 // ---------------------------------------------------------------------------
 
-export { PolaroidFrame } from './components/PolaroidFrame'
-export { PolaroidImageEditor } from './components/PolaroidImageEditor'
+export { InstantPhotoFrame } from './components/InstantPhotoFrame'
+export { InstantPhotoImageEditor } from './components/InstantPhotoImageEditor'
 
 export { FRAME_SPECS, FILM_PROFILES, PRINT_DPI, getFrameInsets } from './presets/profiles'
 
@@ -25,8 +25,8 @@ export type {
   // Interactive transform
   ImageTransform,
   // Settings snapshot
-  PolaroidSettings,
+  InstantPhotoSettings,
   // Components
-  PolaroidFrameProps,
-  PolaroidImageEditorProps,
+  InstantPhotoFrameProps,
+  InstantPhotoImageEditorProps,
 } from './types'

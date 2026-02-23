@@ -10,7 +10,7 @@
 // scales with the displayed image size.
 // ---------------------------------------------------------------------------
 
-import type { ImageTransform, PolaroidGLOptions } from '../types'
+import type { ImageTransform, InstantPhotoGLOptions } from '../types'
 import { BLUR_FRAG_SHADER, MAIN_FRAG_SHADER, VERT_SHADER } from './shaders'
 import {
   bindQuad,
@@ -89,7 +89,7 @@ export function createPipeline(canvas: HTMLCanvasElement): Pipeline | null {
       fboDataType,
     }
   } catch (err) {
-    console.error('[PolaroidFrame] WebGL pipeline init failed:', err)
+    console.error('[InstantPhotoFrame] WebGL pipeline init failed:', err)
     return null
   }
 }
@@ -211,7 +211,7 @@ export interface RenderFlags {
 export function render(
   pipeline: Pipeline,
   image: ImageBitmap | HTMLImageElement,
-  options: PolaroidGLOptions,
+  options: InstantPhotoGLOptions,
   imageTransform?: ImageTransform,
   flags: RenderFlags = {}
 ): void {

@@ -23,7 +23,7 @@ async function uploadImage(page: import('@playwright/test').Page, filename = 'ge
 test.describe('Gestures – keyboard shortcuts', () => {
   test('overlay is keyboard-focusable (has tabIndex)', async ({ page }) => {
     await page.goto(STORY_URL)
-    const overlay = page.locator('.plrd-gesture-overlay')
+    const overlay = page.locator('.ipf-gesture-overlay')
     await expect(overlay).toBeVisible()
     const tabIndex = await overlay.getAttribute('tabindex')
     expect(tabIndex).toBe('0')
@@ -38,7 +38,7 @@ test.describe('Gestures – keyboard shortcuts', () => {
     const before = await zoomLocator.textContent()
 
     // Focus the overlay and press +
-    const overlay = page.locator('.plrd-gesture-overlay')
+    const overlay = page.locator('.ipf-gesture-overlay')
     await overlay.focus()
     await overlay.press('+')
 
@@ -52,7 +52,7 @@ test.describe('Gestures – keyboard shortcuts', () => {
     await page.goto(STORY_URL)
     await uploadImage(page, 'keyboard-reset.png')
 
-    const overlay = page.locator('.plrd-gesture-overlay')
+    const overlay = page.locator('.ipf-gesture-overlay')
     await overlay.focus()
 
     // Zoom in, then reset
@@ -71,7 +71,7 @@ test.describe('Gestures – keyboard shortcuts', () => {
     await uploadImage(page, 'keyboard-arrow.png')
 
     // Zoom in first so panning is possible
-    const overlay = page.locator('.plrd-gesture-overlay')
+    const overlay = page.locator('.ipf-gesture-overlay')
     await overlay.focus()
     await overlay.press('+')
     await overlay.press('+')
@@ -93,7 +93,7 @@ test.describe('Gestures – pointer drag', () => {
     await page.goto(STORY_URL)
     await uploadImage(page, 'drag-test.png')
 
-    const overlay = page.locator('.plrd-gesture-overlay')
+    const overlay = page.locator('.ipf-gesture-overlay')
     const box = await overlay.boundingBox()
     if (!box) throw new Error('Overlay bounding box not available')
 
@@ -107,7 +107,7 @@ test.describe('Gestures – pointer drag', () => {
     await page.mouse.up()
 
     // Frame should still be visible and stable
-    await expect(page.locator('.plrd-frame--editor')).toBeVisible()
+    await expect(page.locator('.ipf-frame--editor')).toBeVisible()
   })
 })
 
@@ -116,7 +116,7 @@ test.describe('Gestures – wheel zoom', () => {
     await page.goto(STORY_URL)
     await uploadImage(page, 'wheel-test.png')
 
-    const overlay = page.locator('.plrd-gesture-overlay')
+    const overlay = page.locator('.ipf-gesture-overlay')
     const box = await overlay.boundingBox()
     if (!box) throw new Error('Overlay bounding box not available')
 
@@ -125,7 +125,7 @@ test.describe('Gestures – wheel zoom', () => {
     await page.mouse.wheel(0, -200)
     await page.waitForTimeout(200)
 
-    await expect(page.locator('.plrd-frame--editor')).toBeVisible()
+    await expect(page.locator('.ipf-frame--editor')).toBeVisible()
   })
 })
 
@@ -134,7 +134,7 @@ test.describe('Visual regression – frame rendering', () => {
     await page.goto(STORY_URL)
 
     // Capture screenshot of the empty frame state
-    const frame = page.locator('.plrd-frame--editor')
+    const frame = page.locator('.ipf-frame--editor')
     await expect(frame).toBeVisible()
 
     // Take a screenshot and verify it's non-empty (at least 1 KB)
@@ -146,7 +146,7 @@ test.describe('Visual regression – frame rendering', () => {
     await page.goto(STORY_URL)
     await uploadImage(page, 'screenshot-test.png')
 
-    const frame = page.locator('.plrd-frame--editor')
+    const frame = page.locator('.ipf-frame--editor')
     const screenshot = await frame.screenshot()
     expect(screenshot.length).toBeGreaterThan(1000)
   })

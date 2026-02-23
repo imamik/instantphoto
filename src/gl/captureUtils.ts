@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Shared capture utilities used by PolaroidFrame and PolaroidImageEditor.
+// Shared capture utilities used by InstantPhotoFrame and InstantPhotoImageEditor.
 // ---------------------------------------------------------------------------
 
 import type { ExportFormat, FrameSpec } from '../types'

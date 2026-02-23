@@ -1,4 +1,4 @@
-import './PolaroidFrame.css'
+import './InstantPhotoFrame.css'
 
 import { useCallback, useRef } from 'react'
 
@@ -10,15 +10,15 @@ import {
   getImageCornerRadiusPx,
 } from '../../presets/profiles'
 import { useContainedWidth } from '../../hooks/useContainedWidth'
-import { usePolaroidGL } from '../../hooks/usePolaroidGL'
+import { useInstantPhotoGL } from '../../hooks/useInstantPhotoGL'
 import { buildFrameCapture, buildImageCapture } from '../../gl/captureUtils'
-import type { CaptureOptions, CaptureFn, PolaroidFrameProps } from '../../types'
+import type { CaptureOptions, CaptureFn, InstantPhotoFrameProps } from '../../types'
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
-export function PolaroidFrame({
+export function InstantPhotoFrame({
   src,
   frameType = 'polaroid_600',
   filmType = 'polaroid',
@@ -42,7 +42,7 @@ export function PolaroidFrame({
   style,
   onRender,
   onError,
-}: PolaroidFrameProps) {
+}: InstantPhotoFrameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
 
@@ -88,7 +88,7 @@ export function PolaroidFrame({
     [frameType]
   )
 
-  usePolaroidGL(
+  useInstantPhotoGL(
     canvasRef,
     src,
     {
@@ -117,15 +117,15 @@ export function PolaroidFrame({
 
   // CSS custom properties that drive frame layout and paper styling
   const frameVars: React.CSSProperties = {
-    '--plrd-frame-aspect': insets.frameAspect,
-    '--plrd-paper-color': spec.paperColor,
-    '--plrd-corner-radius': `${spec.cornerRadius}px`,
-    '--plrd-shadow': spec.shadow,
-    '--plrd-inset-top': insets.top,
-    '--plrd-inset-left': insets.left,
-    '--plrd-inset-right': insets.right,
-    '--plrd-inset-bottom': insets.bottom,
-    '--plrd-image-corner-radius': `${getImageDisplayCornerRadiusPx(spec)}px`,
+    '--ipf-frame-aspect': insets.frameAspect,
+    '--ipf-paper-color': spec.paperColor,
+    '--ipf-corner-radius': `${spec.cornerRadius}px`,
+    '--ipf-shadow': spec.shadow,
+    '--ipf-inset-top': insets.top,
+    '--ipf-inset-left': insets.left,
+    '--ipf-inset-right': insets.right,
+    '--ipf-inset-bottom': insets.bottom,
+    '--ipf-image-corner-radius': `${getImageDisplayCornerRadiusPx(spec)}px`,
     width: typeof fittedWidth === 'number' ? `${fittedWidth}px` : fittedWidth,
   } as React.CSSProperties
 
@@ -135,15 +135,15 @@ export function PolaroidFrame({
   return (
     <div
       ref={frameRef}
-      className={`plrd-frame${className ? ` ${className}` : ''}`}
+      className={`ipf-frame${className ? ` ${className}` : ''}`}
       style={{ ...frameVars, ...style }}
       data-frame-type={frameType}
       data-film-type={filmType}
     >
-      <div className="plrd-image-wrap">
-        <canvas ref={canvasRef} className="plrd-canvas" />
+      <div className="ipf-image-wrap">
+        <canvas ref={canvasRef} className="ipf-canvas" />
         {fallbackSrc && (
-          <img src={fallbackSrc} alt="" aria-hidden="true" className="plrd-fallback" />
+          <img src={fallbackSrc} alt="" aria-hidden="true" className="ipf-fallback" />
         )}
       </div>
     </div>

@@ -1,17 +1,17 @@
 // ---------------------------------------------------------------------------
-// Imperative GL hook for PolaroidImageEditor.
+// Imperative GL hook for InstantPhotoImageEditor.
 //
-// Unlike usePolaroidGL (which drives renders from React state), this hook
+// Unlike useInstantPhotoGL (which drives renders from React state), this hook
 // exposes renderFrame() for direct synchronous rendering from the gesture
 // hot path, bypassing React re-renders entirely.
 //
 // The hook still uses React effects for the slow path (image load,
-// film-effect changes), mirroring usePolaroidGL's lifecycle.
+// film-effect changes), mirroring useInstantPhotoGL's lifecycle.
 // ---------------------------------------------------------------------------
 
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 
-import type { CaptureFn, ImageTransform, PolaroidGLOptions } from '../types'
+import type { CaptureFn, ImageTransform, InstantPhotoGLOptions } from '../types'
 import { computeCrop, createPipeline, destroyPipeline, render, type Pipeline } from '../gl/pipeline'
 import { loadImageBitmap } from '../utils/loadImageBitmap'
 
@@ -49,7 +49,7 @@ export interface UseInteractiveGLResult {
 export function useInteractiveGL(
   canvasRef: React.RefObject<HTMLCanvasElement | null>,
   src: string | HTMLImageElement | ImageBitmap | undefined,
-  options: PolaroidGLOptions,
+  options: InstantPhotoGLOptions,
   transformRef: React.MutableRefObject<ImageTransform>,
   callbacks: UseInteractiveGLCallbacks
 ): UseInteractiveGLResult {
