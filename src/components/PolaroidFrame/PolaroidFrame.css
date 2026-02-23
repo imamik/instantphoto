@@ -1,0 +1,60 @@
+/* ---------------------------------------------------------------------------
+ * @instantphoto/react – PolaroidFrame component styles
+ *
+ * All class names are prefixed with `.plrd-` to avoid collisions.
+ * Consumers must import this stylesheet once in their application:
+ *   import '@instantphoto/react/styles.css'
+ *
+ * Layout strategy:
+ *   • .plrd-frame  – the outer card (white paper + shadow), aspect-ratio
+ *     driven by CSS custom property --plrd-frame-aspect.
+ *   • .plrd-image-wrap – absolutely positioned image cutout inside the frame.
+ *     Inset percentages (--plrd-inset-*) are set as inline custom properties
+ *     by the component and follow the CSS spec:
+ *       top / bottom → % of containing-block HEIGHT
+ *       left / right → % of containing-block WIDTH
+ *   • .plrd-canvas – the WebGL canvas fills the image cutout 100 × 100 %.
+ * -------------------------------------------------------------------------- */
+
+.plrd-frame {
+  position: relative;
+  display: inline-block;
+
+  aspect-ratio: var(--plrd-frame-aspect);
+  background-color: var(--plrd-paper-color, #fcfcfa);
+  border-radius: var(--plrd-corner-radius, 4px);
+  box-shadow: var(--plrd-shadow);
+
+  /* Prevent canvas bleeding past rounded corners */
+  overflow: hidden;
+}
+
+.plrd-image-wrap {
+  position: absolute;
+  top:    var(--plrd-inset-top);
+  left:   var(--plrd-inset-left);
+  right:  var(--plrd-inset-right);
+  bottom: var(--plrd-inset-bottom);
+  border-radius: var(--plrd-image-corner-radius, 2px);
+  overflow: hidden;
+  /* Neutral placeholder colour visible for the few ms before WebGL paints */
+  background-color: #c8bfb0;
+}
+
+.plrd-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Invisible fallback <img> — shown before WebGL has painted */
+.plrd-fallback {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+}

@@ -1,0 +1,1 @@
+export { PolaroidFrame } from './PolaroidFrame'

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.tsbuildinfo
+storybook-static/
+test-results/
+coverage/
+.DS_Store
+*.swp
+*.swo
