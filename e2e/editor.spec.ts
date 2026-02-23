@@ -4,7 +4,7 @@ import { writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 
 const STORY_URL =
-  '/iframe.html?id=components-polaroidimageeditor--image-editor&viewMode=story'
+  '/iframe.html?id=components-instantphotoimageeditor--image-editor&viewMode=story'
 
 // Minimal 1×1 red pixel PNG (valid, RGB colortype=2)
 const TINY_PNG = Buffer.from(

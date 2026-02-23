@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test'
 // Route all picsum.photos image requests to a tiny 1×1 PNG so the test
 // does not depend on external network access.
 const STORY_URL =
-  '/iframe.html?id=components-polaroidframe--polaroid-600&viewMode=story'
+  '/iframe.html?id=components-instantphotoframe--polaroid-600&viewMode=story'
 
 // Minimal 1×1 red pixel PNG (valid, RGB colortype=2)
 const TINY_PNG = Buffer.from(
