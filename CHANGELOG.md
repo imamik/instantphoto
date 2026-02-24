@@ -1,5 +1,22 @@
 # @instantphoto/react
 
+## 0.4.0
+
+### Minor Changes
+
+- Add ErrorBoundary, device detection, capture hook, frame registry, GL options clamping, and AbortSignal support
+  - `InstantPhotoErrorBoundary` — React class error boundary for GL render failures
+  - `detectLowEndDevice()` — heuristic for low-end/mobile device detection
+  - `useInstantPhotoCapture()` — imperative capture hook returning `{ ref, onRender }`
+  - `registerFrameSpec(id, spec)` / `resolveFrameSpec(id)` — extensible frame spec registry
+  - `clampGLOptions(opts)` — clamps GL option values to valid ranges
+  - `FrameTypeOrSpec` union type (`FrameType | FrameSpec`)
+  - `batchProcess` now accepts `signal?: AbortSignal` (throws `AbortError` on cancel)
+  - `loadImageBitmap` now accepts `signal?: AbortSignal`, 30 s timeout, and CORS error guidance
+  - `liveUpdateDuringGesture` auto-detected at mount when omitted in `InstantPhotoImageEditor`
+  - `role="application"` + `:focus-visible` outline on gesture overlay for accessibility
+  - Visual regression test suite (`e2e/visual.spec.ts`)
+
 ## 0.3.0
 
 ### Minor Changes
