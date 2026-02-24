@@ -30,6 +30,12 @@ export interface BatchProcessOptions {
   onProgress?: (completed: number, total: number) => void
   /** WebGL effect overrides applied to every item (filmType, grain, vignette, etc.). */
   glOptions?: Partial<Omit<InstantPhotoGLOptions, 'canvasSize' | 'imageAspect'>>
+  /**
+   * Optional AbortSignal to cancel the batch mid-flight.
+   * When aborted, the current item finishes but no further items are processed.
+   * The pipeline is still cleaned up and an `AbortError` DOMException is thrown.
+   */
+  signal?: AbortSignal
 }
 
 /**
@@ -52,7 +58,13 @@ export async function batchProcess(
   items: BatchItem[],
   options: BatchProcessOptions = {}
 ): Promise<Array<Blob | null>> {
-  const { frameType = 'polaroid_600', captureOptions = {}, onProgress, glOptions = {} } = options
+  const {
+    frameType = 'polaroid_600',
+    captureOptions = {},
+    onProgress,
+    glOptions = {},
+    signal,
+  } = options
 
   const spec = FRAME_SPECS[frameType]
   const insets = getFrameInsets(spec)
@@ -77,7 +89,8 @@ export async function batchProcess(
 
   try {
     for (let i = 0; i < items.length; i++) {
-      const image = await loadImageBitmap(items[i].src)
+      if (signal?.aborted) throw new DOMException('Batch aborted', 'AbortError')
+      const image = await loadImageBitmap(items[i].src, signal)
 
       render(pipeline, image, {
         ...glFullOptions,

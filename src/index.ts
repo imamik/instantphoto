@@ -5,15 +5,31 @@
 export { InstantPhotoFrame } from './components/InstantPhotoFrame'
 export { InstantPhotoImageEditor } from './components/InstantPhotoImageEditor'
 export { InstantPhotoEditor } from './components/InstantPhotoEditor'
+export { InstantPhotoErrorBoundary } from './components/InstantPhotoErrorBoundary/InstantPhotoErrorBoundary'
+export type { InstantPhotoErrorBoundaryProps } from './components/InstantPhotoErrorBoundary/InstantPhotoErrorBoundary'
 
-export { FRAME_SPECS, FILM_PROFILES, PRINT_DPI, getFrameInsets } from './presets/profiles'
+export {
+  FRAME_SPECS,
+  FILM_PROFILES,
+  PRINT_DPI,
+  getFrameInsets,
+  registerFrameSpec,
+  resolveFrameSpec,
+} from './presets/profiles'
 
 export { batchProcess } from './utils/batchProcess'
 export type { BatchItem, BatchProcessOptions } from './utils/batchProcess'
 
+export { detectLowEndDevice } from './utils/deviceCapability'
+
+export { useInstantPhotoCapture } from './hooks/useInstantPhotoCapture'
+
+export { clampGLOptions } from './gl/pipeline'
+
 export type {
   // Frame / film identifiers
   FrameType,
+  FrameTypeOrSpec,
   FilmType,
   // Data shapes
   FrameSpec,

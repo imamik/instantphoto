@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { FILM_PROFILES, FRAME_SPECS, PRINT_DPI, getFrameInsets } from '../presets/profiles'
-import type { FilmType, FrameType } from '../types'
+import {
+  FILM_PROFILES,
+  FRAME_SPECS,
+  PRINT_DPI,
+  getFrameInsets,
+  registerFrameSpec,
+  resolveFrameSpec,
+} from '../presets/profiles'
+import type { FilmType, FrameSpec, FrameType } from '../types'
 
 const FRAME_TYPES: FrameType[] = ['polaroid_600', 'instax_mini', 'instax_square', 'instax_wide']
 const FILM_TYPES: FilmType[] = ['polaroid', 'instax', 'original']
@@ -130,6 +137,53 @@ describe('FILM_PROFILES', () => {
 // ---------------------------------------------------------------------------
 // getFrameInsets
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// resolveFrameSpec / registerFrameSpec
+// ---------------------------------------------------------------------------
+
+const CUSTOM_SPEC: FrameSpec = {
+  totalSize: [800, 900],
+  imageSize: [700, 700],
+  imagePos: [50, 100],
+  canvasSize: [500, 500],
+  cornerRadius: 3,
+  paperColor: '#ffffff',
+  shadow: 'none',
+}
+
+describe('resolveFrameSpec', () => {
+  it('resolves a built-in FrameType string to the correct spec', () => {
+    expect(resolveFrameSpec('polaroid_600')).toBe(FRAME_SPECS.polaroid_600)
+  })
+
+  it('returns the default polaroid_600 spec when called with no argument', () => {
+    expect(resolveFrameSpec()).toBe(FRAME_SPECS.polaroid_600)
+  })
+
+  it('returns an inline FrameSpec object directly', () => {
+    expect(resolveFrameSpec(CUSTOM_SPEC)).toBe(CUSTOM_SPEC)
+  })
+
+  it('falls back to polaroid_600 for an unknown string ID', () => {
+    expect(resolveFrameSpec('does_not_exist')).toBe(FRAME_SPECS.polaroid_600)
+  })
+
+  it('resolves a registered custom ID to its spec', () => {
+    registerFrameSpec('my_custom_frame', CUSTOM_SPEC)
+    expect(resolveFrameSpec('my_custom_frame')).toBe(CUSTOM_SPEC)
+  })
+})
+
+describe('registerFrameSpec', () => {
+  it('overwrites a previously registered spec under the same ID', () => {
+    const specA: FrameSpec = { ...CUSTOM_SPEC, paperColor: '#aaaaaa' }
+    const specB: FrameSpec = { ...CUSTOM_SPEC, paperColor: '#bbbbbb' }
+    registerFrameSpec('overwrite_test', specA)
+    registerFrameSpec('overwrite_test', specB)
+    expect(resolveFrameSpec('overwrite_test')).toBe(specB)
+  })
+})
 
 describe('getFrameInsets', () => {
   it('returns percentage strings for all inset sides', () => {

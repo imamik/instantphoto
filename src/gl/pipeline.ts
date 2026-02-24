@@ -11,6 +11,41 @@
 // ---------------------------------------------------------------------------
 
 import type { ImageTransform, InstantPhotoGLOptions } from '../types'
+
+// ---------------------------------------------------------------------------
+// GL options validation
+// ---------------------------------------------------------------------------
+
+/**
+ * Clamp all numeric GL option values to their valid ranges.
+ * Call this before passing options to `render()` to prevent silent corruption
+ * from out-of-range uniforms.
+ */
+export function clampGLOptions(opts: InstantPhotoGLOptions): InstantPhotoGLOptions {
+  const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v))
+  return {
+    ...opts,
+    vignetteIntensity:
+      opts.vignetteIntensity !== undefined ? clamp(opts.vignetteIntensity, 0, 1) : undefined,
+    halationAmount:
+      opts.halationAmount !== undefined ? clamp(opts.halationAmount, 0, 1) : undefined,
+    grainAmount: opts.grainAmount !== undefined ? clamp(opts.grainAmount, 0, 1) : undefined,
+    grainColorAmount:
+      opts.grainColorAmount !== undefined ? clamp(opts.grainColorAmount, 0, 1) : undefined,
+    grainSizePx: opts.grainSizePx !== undefined ? clamp(opts.grainSizePx, 0.5, 10) : undefined,
+    chromaticShift:
+      opts.chromaticShift !== undefined ? clamp(opts.chromaticShift, 0, 20) : undefined,
+    saturationDelta:
+      opts.saturationDelta !== undefined ? clamp(opts.saturationDelta, -100, 100) : undefined,
+    filmCurveAmount:
+      opts.filmCurveAmount !== undefined ? clamp(opts.filmCurveAmount, 0, 1) : undefined,
+    shadowWideIntensity:
+      opts.shadowWideIntensity !== undefined ? clamp(opts.shadowWideIntensity, 0, 1) : undefined,
+    shadowFineIntensity:
+      opts.shadowFineIntensity !== undefined ? clamp(opts.shadowFineIntensity, 0, 1) : undefined,
+    seed: clamp(opts.seed, 0, Infinity),
+  }
+}
 import { BLUR_FRAG_SHADER, MAIN_FRAG_SHADER, VERT_SHADER } from './shaders'
 import {
   bindQuad,
@@ -208,6 +243,59 @@ export interface RenderFlags {
   rawPreview?: boolean
 }
 
+// ---------------------------------------------------------------------------
+// Internal resolved options (all fields required — no undefined)
+// ---------------------------------------------------------------------------
+
+interface ResolvedGLOptions {
+  filmType: InstantPhotoGLOptions['filmType']
+  canvasSize: InstantPhotoGLOptions['canvasSize']
+  imageAspect: number
+  imageCornerRadiusPx: number
+  vignetteIntensity: number
+  halationAmount: number
+  grainAmount: number
+  grainSizePx: number
+  grainColorAmount: number
+  chromaticShift: number
+  saturationDelta: number
+  filmCurveAmount: number
+  shadowWideIntensity: number
+  shadowWideStart: number
+  shadowWideEnd: number
+  shadowFineIntensity: number
+  shadowFineStart: number
+  shadowFineEnd: number
+  seed: number
+}
+
+function resolveGLOptions(options: InstantPhotoGLOptions): ResolvedGLOptions {
+  const isOriginal = options.filmType === 'original'
+  const isPolaroid = options.filmType === 'polaroid'
+  const seed = options.seed !== 0 ? options.seed : Math.random() * 9999
+  return {
+    filmType: options.filmType,
+    canvasSize: options.canvasSize,
+    imageAspect: options.imageAspect,
+    imageCornerRadiusPx: options.imageCornerRadiusPx ?? 0,
+    vignetteIntensity: options.vignetteIntensity ?? (isOriginal ? 0.0 : isPolaroid ? 0.4 : 0.25),
+    halationAmount: options.halationAmount ?? (isOriginal ? 0.0 : isPolaroid ? 0.17 : 0.08),
+    grainAmount: options.grainAmount ?? (isOriginal ? 0.0 : isPolaroid ? 0.021 : 0.018),
+    grainSizePx: options.grainSizePx ?? 2.08,
+    grainColorAmount: options.grainColorAmount ?? 1.0,
+    chromaticShift: options.chromaticShift ?? (isOriginal ? 0.0 : isPolaroid ? 1.5 : 1.2),
+    saturationDelta: options.saturationDelta ?? (isOriginal ? 0.0 : isPolaroid ? -15.0 : -10.0),
+    filmCurveAmount: options.filmCurveAmount ?? (isOriginal ? 0.0 : 1.0),
+    shadowWideIntensity: options.shadowWideIntensity ?? 0.31,
+    shadowWideStart: options.shadowWideStart ?? 0.02,
+    shadowWideEnd: options.shadowWideEnd ?? 0.11,
+    shadowFineIntensity: options.shadowFineIntensity ?? 0.3,
+    shadowFineStart: options.shadowFineStart ?? 0.003,
+    shadowFineEnd: options.shadowFineEnd ?? 0.006,
+    seed,
+  }
+}
+
 export function render(
   pipeline: Pipeline,
   image: ImageBitmap | HTMLImageElement,
@@ -218,6 +306,9 @@ export function render(
   const { gl, mainProgram, quadBuffer } = pipeline
   const { drawingBufferWidth: cw, drawingBufferHeight: ch } = gl
   const rawPreview = flags.rawPreview === true
+
+  // Clamp and resolve all GL options to concrete values
+  const resolved = resolveGLOptions(clampGLOptions(options))
 
   // Ensure FBOs match the current canvas size
   ensureSize(pipeline, cw, ch)
@@ -232,7 +323,7 @@ export function render(
   const srcH = 'naturalHeight' in image ? image.naturalHeight : image.height
 
   // Compute base UV crop to centre-fill the frame's image aspect ratio
-  const { offset: baseOffset, scale: baseScale } = computeCrop(srcW, srcH, options.imageAspect)
+  const { offset: baseOffset, scale: baseScale } = computeCrop(srcW, srcH, resolved.imageAspect)
 
   // Apply optional pan/zoom transform on top of the base crop
   let [uvOffX, uvOffY] = baseOffset
@@ -260,24 +351,8 @@ export function render(
   const uvOffset: [number, number] = [uvOffX, uvOffY]
   const uvScale: [number, number] = [uvSX, uvSY]
 
-  const isOriginal = options.filmType === 'original'
-  const isPolaroid = options.filmType === 'polaroid'
-  // Resolve effect parameters (props override film-profile defaults)
-  const vignette = options.vignetteIntensity ?? (isOriginal ? 0.0 : isPolaroid ? 0.4 : 0.25)
-  const halation = options.halationAmount ?? (isOriginal ? 0.0 : isPolaroid ? 0.17 : 0.08)
-  const grain = options.grainAmount ?? (isOriginal ? 0.0 : isPolaroid ? 0.021 : 0.018)
-  const grainSizePx = options.grainSizePx ?? 2.08
-  const grainColorAmount = options.grainColorAmount ?? 1.0
-  const chromaticShift = options.chromaticShift ?? (isOriginal ? 0.0 : isPolaroid ? 1.5 : 1.2)
-  const saturationDelta = options.saturationDelta ?? (isOriginal ? 0.0 : isPolaroid ? -15.0 : -10.0)
-  const filmCurveAmount = options.filmCurveAmount ?? (isOriginal ? 0.0 : 1.0)
-  const shadowWideIntensity = options.shadowWideIntensity ?? 0.31
-  const shadowWideStart = options.shadowWideStart ?? 0.02
-  const shadowWideEnd = options.shadowWideEnd ?? 0.11
-  const shadowFineIntensity = options.shadowFineIntensity ?? 0.3
-  const shadowFineStart = options.shadowFineStart ?? 0.003
-  const shadowFineEnd = options.shadowFineEnd ?? 0.006
-  const seed = options.seed !== 0 ? options.seed : Math.random() * 9999
+  const isOriginal = resolved.filmType === 'original'
+  const isPolaroid = resolved.filmType === 'polaroid'
 
   if (!rawPreview && !isOriginal) {
     // -----------------------------------------------------------------------
@@ -340,24 +415,24 @@ export function render(
     u_uvOffset: uvOffset,
     u_uvScale: uvScale,
     u_rawPreview: rawPreview ? 1.0 : 0.0,
-    u_imageCornerRadiusPx: options.imageCornerRadiusPx ?? 0,
+    u_imageCornerRadiusPx: resolved.imageCornerRadiusPx,
     u_filmType: isPolaroid ? 0.0 : 1.0,
     u_originalOnly: isOriginal ? 1.0 : 0.0,
-    u_vignetteIntensity: vignette!,
-    u_halationAmount: halation!,
-    u_grainAmount: grain!,
-    u_grainSizePx: grainSizePx,
-    u_grainColorAmount: grainColorAmount,
-    u_chromaticShift: chromaticShift,
-    u_saturationDelta: saturationDelta,
-    u_filmCurveAmount: filmCurveAmount,
-    u_shadowWideIntensity: shadowWideIntensity,
-    u_shadowWideStart: shadowWideStart,
-    u_shadowWideEnd: shadowWideEnd,
-    u_shadowFineIntensity: shadowFineIntensity,
-    u_shadowFineStart: shadowFineStart,
-    u_shadowFineEnd: shadowFineEnd,
-    u_seed: seed,
+    u_vignetteIntensity: resolved.vignetteIntensity,
+    u_halationAmount: resolved.halationAmount,
+    u_grainAmount: resolved.grainAmount,
+    u_grainSizePx: resolved.grainSizePx,
+    u_grainColorAmount: resolved.grainColorAmount,
+    u_chromaticShift: resolved.chromaticShift,
+    u_saturationDelta: resolved.saturationDelta,
+    u_filmCurveAmount: resolved.filmCurveAmount,
+    u_shadowWideIntensity: resolved.shadowWideIntensity,
+    u_shadowWideStart: resolved.shadowWideStart,
+    u_shadowWideEnd: resolved.shadowWideEnd,
+    u_shadowFineIntensity: resolved.shadowFineIntensity,
+    u_shadowFineStart: resolved.shadowFineStart,
+    u_shadowFineEnd: resolved.shadowFineEnd,
+    u_seed: resolved.seed,
   })
 
   bindQuad(gl, mainProgram, quadBuffer)

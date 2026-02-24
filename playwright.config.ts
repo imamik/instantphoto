@@ -5,6 +5,10 @@ export default defineConfig({
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
   reporter: 'list',
+  snapshotPathTemplate: '{testDir}/{testName}/{arg}{ext}',
+  expect: {
+    toHaveScreenshot: { maxDiffPixels: 50 },
+  },
 
   use: {
     baseURL: 'http://localhost:6007',

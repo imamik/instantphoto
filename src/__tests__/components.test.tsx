@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { InstantPhotoFrame } from '../components/InstantPhotoFrame'
 import { InstantPhotoImageEditor } from '../components/InstantPhotoImageEditor'
 import { InstantPhotoEditor } from '../components/InstantPhotoEditor'
+import { InstantPhotoErrorBoundary } from '../components/InstantPhotoErrorBoundary/InstantPhotoErrorBoundary'
 
 // ---------------------------------------------------------------------------
 // Note: jsdom does not implement WebGL, so canvas.getContext('webgl')
@@ -182,6 +183,75 @@ describe('InstantPhotoEditor', () => {
     render(<InstantPhotoEditor onUpload={vi.fn()} accept="image/png,image/jpeg" />)
     const input = document.querySelector('input[type="file"]') as HTMLInputElement
     expect(input.accept).toBe('image/png,image/jpeg')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// InstantPhotoErrorBoundary
+// ---------------------------------------------------------------------------
+
+function BrokenComponent(): never {
+  throw new Error('render error')
+}
+
+describe('InstantPhotoErrorBoundary', () => {
+  it('renders children when there is no error', () => {
+    render(
+      <InstantPhotoErrorBoundary fallback={<div>oops</div>}>
+        <span data-testid="ok">OK</span>
+      </InstantPhotoErrorBoundary>
+    )
+    expect(document.querySelector('[data-testid="ok"]')).toBeInTheDocument()
+  })
+
+  it('renders ReactNode fallback when a child throws', () => {
+    // Suppress the expected error output from React
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    render(
+      <InstantPhotoErrorBoundary fallback={<div data-testid="fallback">Something went wrong</div>}>
+        <BrokenComponent />
+      </InstantPhotoErrorBoundary>
+    )
+    expect(document.querySelector('[data-testid="fallback"]')).toBeInTheDocument()
+    spy.mockRestore()
+  })
+
+  it('renders function fallback receiving the error', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    render(
+      <InstantPhotoErrorBoundary
+        fallback={err => <div data-testid="fn-fallback">{err.message}</div>}
+      >
+        <BrokenComponent />
+      </InstantPhotoErrorBoundary>
+    )
+    expect(document.querySelector('[data-testid="fn-fallback"]')?.textContent).toBe('render error')
+    spy.mockRestore()
+  })
+
+  it('calls onError callback with the thrown error', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const onError = vi.fn()
+    render(
+      <InstantPhotoErrorBoundary fallback={<div>error</div>} onError={onError}>
+        <BrokenComponent />
+      </InstantPhotoErrorBoundary>
+    )
+    expect(onError).toHaveBeenCalledOnce()
+    expect(onError.mock.calls[0][0]).toBeInstanceOf(Error)
+    expect(onError.mock.calls[0][0].message).toBe('render error')
+    spy.mockRestore()
+  })
+
+  it('renders null when error occurs and no fallback is provided', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const { container } = render(
+      <InstantPhotoErrorBoundary>
+        <BrokenComponent />
+      </InstantPhotoErrorBoundary>
+    )
+    expect(container.firstChild).toBeNull()
+    spy.mockRestore()
   })
 })
 

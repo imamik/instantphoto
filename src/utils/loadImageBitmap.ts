@@ -51,7 +51,8 @@ async function createFlippedBitmap(blob: Blob): Promise<ImageBitmap> {
 }
 
 export async function loadImageBitmap(
-  src: string | HTMLImageElement | ImageBitmap
+  src: string | HTMLImageElement | ImageBitmap,
+  signal?: AbortSignal
 ): Promise<ImageBitmap | HTMLImageElement> {
   if (src instanceof ImageBitmap) return src
 
@@ -63,8 +64,31 @@ export async function loadImageBitmap(
     })
   }
 
-  // URL string
-  const response = await fetch(src)
+  // URL string — combine caller signal with a 30s timeout
+  const timeoutSignal = AbortSignal.timeout(30_000)
+  const effectiveSignal =
+    signal && typeof AbortSignal.any === 'function'
+      ? AbortSignal.any([signal, timeoutSignal])
+      : (signal ?? timeoutSignal)
+
+  let response: Response
+  try {
+    response = await fetch(src, { signal: effectiveSignal })
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'TimeoutError') {
+      throw new Error(`Image load timed out after 30s: "${src}"`, { cause: err })
+    }
+    if (err instanceof TypeError) {
+      throw new Error(
+        `Failed to load image "${src}". ` +
+          `If the image is on a different domain, ensure the server sets ` +
+          `Access-Control-Allow-Origin (CORS) headers.`,
+        { cause: err }
+      )
+    }
+    throw err
+  }
+
   if (!response.ok) {
     throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`)
   }

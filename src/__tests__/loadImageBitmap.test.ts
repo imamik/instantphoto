@@ -84,7 +84,10 @@ describe('loadImageBitmap – URL string input', () => {
 
   it('calls fetch with the provided URL', async () => {
     await loadImageBitmap('https://example.com/img.png')
-    expect(vi.mocked(fetch)).toHaveBeenCalledWith('https://example.com/img.png')
+    expect(vi.mocked(fetch)).toHaveBeenCalledWith(
+      'https://example.com/img.png',
+      expect.objectContaining({ signal: expect.anything() })
+    )
   })
 
   it('throws when the HTTP response is not ok', async () => {
@@ -104,6 +107,21 @@ describe('loadImageBitmap – URL string input', () => {
   it('propagates network errors from fetch', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network error')))
     await expect(loadImageBitmap('https://example.com/img.jpg')).rejects.toThrow('Network error')
+  })
+
+  it('wraps TypeError from fetch with CORS guidance', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
+    await expect(loadImageBitmap('https://other.example.com/img.jpg')).rejects.toThrow(
+      'Access-Control-Allow-Origin'
+    )
+  })
+
+  it('wraps TimeoutError with a human-readable message', async () => {
+    const timeoutError = new DOMException('signal timed out', 'TimeoutError')
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(timeoutError))
+    await expect(loadImageBitmap('https://example.com/slow.jpg')).rejects.toThrow(
+      'timed out after 30s'
+    )
   })
 })
 

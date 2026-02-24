@@ -156,3 +156,53 @@ describe('batchProcess – WebGL available', () => {
     expect(calls[1][2].seed).toBeGreaterThan(0)
   })
 })
+
+describe('batchProcess – AbortSignal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    vi.mocked(createPipeline).mockReturnValue(mockPipeline as never)
+    vi.mocked(buildImageCapture).mockResolvedValue(new Blob(['img'], { type: 'image/png' }))
+    vi.mocked(loadImageBitmap).mockResolvedValue({
+      width: 100,
+      height: 80,
+      close: vi.fn(),
+    } as ImageBitmap)
+  })
+
+  it('throws AbortError immediately when signal is already aborted before start', async () => {
+    const controller = new AbortController()
+    controller.abort()
+    await expect(
+      batchProcess([{ src: 'a.jpg' }, { src: 'b.jpg' }], { signal: controller.signal })
+    ).rejects.toMatchObject({ name: 'AbortError' })
+    expect(vi.mocked(render)).not.toHaveBeenCalled()
+  })
+
+  it('still calls destroyPipeline when aborted', async () => {
+    const controller = new AbortController()
+    controller.abort()
+    await expect(
+      batchProcess([{ src: 'a.jpg' }], { signal: controller.signal })
+    ).rejects.toMatchObject({ name: 'AbortError' })
+    expect(vi.mocked(destroyPipeline)).toHaveBeenCalled()
+  })
+
+  it('processes first item and aborts before second when signal is aborted mid-batch', async () => {
+    const controller = new AbortController()
+    // Abort after the first loadImageBitmap call resolves
+    let callCount = 0
+    vi.mocked(loadImageBitmap).mockImplementation(async () => {
+      callCount++
+      if (callCount === 1) controller.abort()
+      return { width: 100, height: 80, close: vi.fn() } as ImageBitmap
+    })
+    await expect(
+      batchProcess([{ src: 'a.jpg' }, { src: 'b.jpg' }, { src: 'c.jpg' }], {
+        signal: controller.signal,
+      })
+    ).rejects.toMatchObject({ name: 'AbortError' })
+    // First item was processed; second check happened then aborted
+    expect(vi.mocked(render)).toHaveBeenCalledTimes(1)
+    expect(vi.mocked(destroyPipeline)).toHaveBeenCalled()
+  })
+})

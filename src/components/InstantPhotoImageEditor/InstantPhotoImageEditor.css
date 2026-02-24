@@ -18,6 +18,12 @@
   cursor: grabbing;
 }
 
+.ipf-gesture-overlay:focus-visible {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* Slot container shown when no src — centres child content */
 .ipf-empty-state {
   position: absolute;

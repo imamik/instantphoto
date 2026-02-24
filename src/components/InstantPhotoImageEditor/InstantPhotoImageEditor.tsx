@@ -5,11 +5,12 @@ import { useCallback, useEffect, useRef } from 'react'
 
 import {
   FILM_PROFILES,
-  FRAME_SPECS,
   getFrameInsets,
   getImageDisplayCornerRadiusPx,
   getImageCornerRadiusPx,
+  resolveFrameSpec,
 } from '../../presets/profiles'
+import { detectLowEndDevice } from '../../utils/deviceCapability'
 import { useContainedWidth } from '../../hooks/useContainedWidth'
 import { useInteractiveGL } from '../../hooks/useInteractiveGL'
 import { useGestures } from '../../hooks/useGestures'
@@ -18,6 +19,7 @@ import { buildFrameCapture, buildImageCapture } from '../../gl/captureUtils'
 import type {
   CaptureOptions,
   CaptureFn,
+  FrameTypeOrSpec,
   ImageTransform,
   InstantPhotoImageEditorProps,
   InstantPhotoSettings,
@@ -31,7 +33,7 @@ export function InstantPhotoImageEditor({
   src,
   emptyState,
   imageOverlay,
-  frameType = 'polaroid_600',
+  frameType = 'polaroid_600' as FrameTypeOrSpec,
   filmType = 'polaroid',
   grainAmount,
   grainSizePx,
@@ -50,7 +52,7 @@ export function InstantPhotoImageEditor({
   seed = 0,
   maxZoom = 5,
   onRenderDelay = 600,
-  liveUpdateDuringGesture = true,
+  liveUpdateDuringGesture,
   width = '100%',
   className,
   style,
@@ -64,8 +66,10 @@ export function InstantPhotoImageEditor({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const transformRef = useRef<ImageTransform>({ panX: 0, panY: 0, scale: 1 })
+  // Auto-detect once at mount time; explicit prop always wins
+  const effectiveLiveUpdate = useRef(liveUpdateDuringGesture ?? !detectLowEndDevice()).current
 
-  const spec = FRAME_SPECS[frameType]
+  const spec = resolveFrameSpec(frameType)
   const profile = FILM_PROFILES[filmType]
   const insets = getFrameInsets(spec)
   const frameAspect = spec.totalSize[0] / spec.totalSize[1]
@@ -115,12 +119,13 @@ export function InstantPhotoImageEditor({
       const canvas = canvasRef.current
       if (!canvas) return null
 
+      const captureSpec = resolveFrameSpec(frameType)
       if (target === 'image') {
-        return buildImageCapture(canvas, FRAME_SPECS[frameType], format, quality)
+        return buildImageCapture(canvas, captureSpec, format, quality)
       }
 
       // 'frame': composite canvas + white paper border
-      return buildFrameCapture(canvas, FRAME_SPECS[frameType], format, quality)
+      return buildFrameCapture(canvas, captureSpec, format, quality)
     },
     [frameType]
   )
@@ -177,7 +182,7 @@ export function InstantPhotoImageEditor({
     maxZoom,
     onGestureStart: cancelOnRender,
     onTransform: t => {
-      if (liveUpdateDuringGesture) {
+      if (effectiveLiveUpdate) {
         renderFrame()
       } else {
         // Deferred mode: preview only the raw source crop for speed and to
@@ -187,7 +192,7 @@ export function InstantPhotoImageEditor({
       onTransformChange?.(t)
     },
     onGestureEnd: () => {
-      if (!liveUpdateDuringGesture) {
+      if (!effectiveLiveUpdate) {
         renderFrame()
       }
       // Record transform checkpoint for undo history when gesture ends
@@ -289,6 +294,7 @@ export function InstantPhotoImageEditor({
         <div
           ref={overlayRef}
           className="ipf-gesture-overlay"
+          role="application"
           tabIndex={0}
           aria-label="Image editor — drag to pan, scroll or pinch to zoom, arrow keys to nudge, +/- to zoom, R to reset, Ctrl+Z to undo"
         />

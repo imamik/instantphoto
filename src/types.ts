@@ -3,6 +3,13 @@ import type React from 'react'
 /** Supported instant photo frame formats */
 export type FrameType = 'polaroid_600' | 'instax_mini' | 'instax_square' | 'instax_wide'
 
+/**
+ * A built-in `FrameType` string or an inline `FrameSpec` object.
+ * Pass a custom `FrameSpec` directly to use a fully custom frame format,
+ * or register one by ID with `registerFrameSpec` and pass that string ID.
+ */
+export type FrameTypeOrSpec = FrameType | FrameSpec
+
 /** Film emulsion characteristic to emulate */
 export type FilmType = 'polaroid' | 'instax' | 'original'
 
@@ -159,7 +166,7 @@ export interface ImageTransform {
  * ```
  */
 export interface InstantPhotoSettings {
-  frameType: FrameType
+  frameType: FrameTypeOrSpec
   filmType: FilmType
   transform: ImageTransform
   grainAmount: number
@@ -190,8 +197,8 @@ export interface InstantPhotoFrameProps {
    * or a decoded ImageBitmap.
    */
   src: string | HTMLImageElement | ImageBitmap
-  /** Frame format. Defaults to `'polaroid_600'`. */
-  frameType?: FrameType
+  /** Frame format. Defaults to `'polaroid_600'`. Accepts a built-in `FrameType`, a custom registered ID, or an inline `FrameSpec` object. */
+  frameType?: FrameTypeOrSpec
   /** Film emulsion profile. Defaults to `'polaroid'`. */
   filmType?: FilmType
   /** Override grain intensity (0–1). Defaults to film-profile value. */
@@ -268,8 +275,8 @@ export interface InstantPhotoImageEditorProps {
    * interactive children (buttons, icons).
    */
   imageOverlay?: React.ReactNode
-  /** Frame format. Defaults to `'polaroid_600'`. */
-  frameType?: FrameType
+  /** Frame format. Defaults to `'polaroid_600'`. Accepts a built-in `FrameType`, a custom registered ID, or an inline `FrameSpec` object. */
+  frameType?: FrameTypeOrSpec
   /** Film emulsion profile. Defaults to `'polaroid'`. */
   filmType?: FilmType
   /** Override grain intensity (0–1). Defaults to film-profile value. */
@@ -315,10 +322,13 @@ export interface InstantPhotoImageEditorProps {
   onRenderDelay?: number
   /**
    * Whether to re-render the WebGL pipeline on every gesture update.
-   * - `true` (default): highest fidelity live preview.
+   * - `true`: highest fidelity live preview.
    * - `false`: lightweight GPU raw-source preview during drag/pinch (no
    *   film effects), one full-effects render on gesture end (typically much
    *   smoother on low-end/mobile devices).
+   * - When omitted (default), the value is **auto-detected** at mount time:
+   *   `false` on low-end/mobile devices (≤2 CPU cores or mobile UA),
+   *   `true` on all other devices.
    */
   liveUpdateDuringGesture?: boolean
   /** CSS width of the frame. Defaults to `'100%'`. */

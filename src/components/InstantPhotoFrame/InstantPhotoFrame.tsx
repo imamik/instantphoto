@@ -4,15 +4,20 @@ import { useCallback, useRef } from 'react'
 
 import {
   FILM_PROFILES,
-  FRAME_SPECS,
   getFrameInsets,
   getImageDisplayCornerRadiusPx,
   getImageCornerRadiusPx,
+  resolveFrameSpec,
 } from '../../presets/profiles'
 import { useContainedWidth } from '../../hooks/useContainedWidth'
 import { useInstantPhotoGL } from '../../hooks/useInstantPhotoGL'
 import { buildFrameCapture, buildImageCapture } from '../../gl/captureUtils'
-import type { CaptureOptions, CaptureFn, InstantPhotoFrameProps } from '../../types'
+import type {
+  CaptureOptions,
+  CaptureFn,
+  FrameTypeOrSpec,
+  InstantPhotoFrameProps,
+} from '../../types'
 
 // ---------------------------------------------------------------------------
 // Component
@@ -20,7 +25,7 @@ import type { CaptureOptions, CaptureFn, InstantPhotoFrameProps } from '../../ty
 
 export function InstantPhotoFrame({
   src,
-  frameType = 'polaroid_600',
+  frameType = 'polaroid_600' as FrameTypeOrSpec,
   filmType = 'polaroid',
   grainAmount,
   grainSizePx,
@@ -46,7 +51,7 @@ export function InstantPhotoFrame({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
 
-  const spec = FRAME_SPECS[frameType]
+  const spec = resolveFrameSpec(frameType)
   const profile = FILM_PROFILES[filmType]
   const insets = getFrameInsets(spec)
   const frameAspect = spec.totalSize[0] / spec.totalSize[1]
@@ -77,12 +82,13 @@ export function InstantPhotoFrame({
       const canvas = canvasRef.current
       if (!canvas) return null
 
+      const captureSpec = resolveFrameSpec(frameType)
       if (target === 'image') {
-        return buildImageCapture(canvas, FRAME_SPECS[frameType], format, quality)
+        return buildImageCapture(canvas, captureSpec, format, quality)
       }
 
       // 'frame': composite canvas + white paper border
-      return buildFrameCapture(canvas, FRAME_SPECS[frameType], format, quality)
+      return buildFrameCapture(canvas, captureSpec, format, quality)
     },
     // frameType determines which spec is used for 'frame' captures
     [frameType]

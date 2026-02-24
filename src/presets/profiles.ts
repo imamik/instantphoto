@@ -1,4 +1,4 @@
-import type { FilmProfile, FilmType, FrameSpec, FrameType } from '../types'
+import type { FilmProfile, FilmType, FrameSpec, FrameType, FrameTypeOrSpec } from '../types'
 
 // ---------------------------------------------------------------------------
 // Print resolution
@@ -159,4 +159,36 @@ export function getImageCornerRadiusPx(spec: FrameSpec): number {
 /** Returns the photo cutout corner radius for CSS display-space clipping. */
 export function getImageDisplayCornerRadiusPx(spec: FrameSpec): number {
   return Math.max(1, spec.cornerRadius * IMAGE_CORNER_RADIUS_FACTOR)
+}
+
+// ---------------------------------------------------------------------------
+// Extensible frame registry
+// ---------------------------------------------------------------------------
+
+const _customSpecs: Record<string, FrameSpec> = {}
+
+/**
+ * Register a custom `FrameSpec` under a string ID.
+ * After registration, pass the ID string as `frameType` to any component.
+ *
+ * ```ts
+ * registerFrameSpec('my_frame', { totalSize: [1080, 1350], ... })
+ * <InstantPhotoFrame src={src} frameType="my_frame" />
+ * ```
+ */
+export function registerFrameSpec(id: string, spec: FrameSpec): void {
+  _customSpecs[id] = spec
+}
+
+/**
+ * Resolve a `FrameTypeOrSpec` (or a custom registered string ID) to a concrete `FrameSpec`.
+ *
+ * - If `frameType` is a `FrameSpec` object, returns it directly.
+ * - If it is a built-in `FrameType` string, returns `FRAME_SPECS[frameType]`.
+ * - If it is a custom registered string ID, returns the registered spec.
+ * - Falls back to `polaroid_600` when the ID is unknown.
+ */
+export function resolveFrameSpec(frameType: FrameTypeOrSpec | string = 'polaroid_600'): FrameSpec {
+  if (typeof frameType !== 'string') return frameType as FrameSpec
+  return FRAME_SPECS[frameType as FrameType] ?? _customSpecs[frameType] ?? FRAME_SPECS.polaroid_600
 }

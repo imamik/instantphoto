@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useContainedWidth } from '../hooks/useContainedWidth'
+import { useInstantPhotoCapture } from '../hooks/useInstantPhotoCapture'
+import type { CaptureFn } from '../types'
 
 // ---------------------------------------------------------------------------
 // useContainedWidth
@@ -99,6 +101,47 @@ describe('useContainedWidth – fallback when no frame ref', () => {
     const frameRef = { current: null } as React.RefObject<HTMLDivElement>
     const { result } = renderHook(() => useContainedWidth(frameRef, '75%', 1))
     expect(result.current).toBe('75%')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// useInstantPhotoCapture
+// ---------------------------------------------------------------------------
+
+describe('useInstantPhotoCapture', () => {
+  it('ref.current is null initially', () => {
+    const { result } = renderHook(() => useInstantPhotoCapture())
+    expect(result.current.ref.current).toBeNull()
+  })
+
+  it('stores the fn after calling onRender', () => {
+    const { result } = renderHook(() => useInstantPhotoCapture())
+    const mockFn: CaptureFn = vi.fn().mockResolvedValue(null)
+    act(() => {
+      result.current.onRender(mockFn)
+    })
+    expect(result.current.ref.current).toBe(mockFn)
+  })
+
+  it('ref always reflects the latest fn after multiple onRender calls', () => {
+    const { result } = renderHook(() => useInstantPhotoCapture())
+    const fn1: CaptureFn = vi.fn().mockResolvedValue(null)
+    const fn2: CaptureFn = vi.fn().mockResolvedValue(null)
+    act(() => {
+      result.current.onRender(fn1)
+    })
+    expect(result.current.ref.current).toBe(fn1)
+    act(() => {
+      result.current.onRender(fn2)
+    })
+    expect(result.current.ref.current).toBe(fn2)
+  })
+
+  it('onRender is stable across re-renders', () => {
+    const { result, rerender } = renderHook(() => useInstantPhotoCapture())
+    const firstOnRender = result.current.onRender
+    rerender()
+    expect(result.current.onRender).toBe(firstOnRender)
   })
 })
 
