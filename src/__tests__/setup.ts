@@ -10,15 +10,52 @@ global.ResizeObserver = class ResizeObserver {
 }
 
 // ---------------------------------------------------------------------------
+// ImageBitmap – not implemented in jsdom
+// Provides a minimal class so `instanceof ImageBitmap` and `createImageBitmap`
+// return values work correctly in tests.
+// ---------------------------------------------------------------------------
+class ImageBitmapStub {
+  width: number
+  height: number
+  constructor(w = 1, h = 1) {
+    this.width = w
+    this.height = h
+  }
+  close() {}
+}
+
+;(global as unknown as Record<string, unknown>).ImageBitmap = ImageBitmapStub
+
+// ---------------------------------------------------------------------------
+// HTMLElement.setPointerCapture / releasePointerCapture – not in jsdom
+// ---------------------------------------------------------------------------
+if (!HTMLElement.prototype.setPointerCapture) {
+  HTMLElement.prototype.setPointerCapture = () => {}
+}
+if (!HTMLElement.prototype.releasePointerCapture) {
+  HTMLElement.prototype.releasePointerCapture = () => {}
+}
+
+// ---------------------------------------------------------------------------
+// HTMLCanvasElement.toBlob – unconditionally stub for jsdom.
+// jsdom may define toBlob but never invoke the callback without the `canvas`
+// package.  We always override to guarantee the callback fires synchronously.
+// ---------------------------------------------------------------------------
+HTMLCanvasElement.prototype.toBlob = function (
+  callback: BlobCallback,
+  type?: string,
+  _quality?: number
+) {
+  callback(new Blob(['<canvas>'], { type: type ?? 'image/png' }))
+}
+
+// ---------------------------------------------------------------------------
 // createImageBitmap – not implemented in jsdom
+// Returns an actual ImageBitmapStub instance so instanceof checks work.
 // ---------------------------------------------------------------------------
 global.createImageBitmap = async (source: ImageBitmapSource): Promise<ImageBitmap> => {
   const el = source as HTMLImageElement
-  return {
-    width: el.naturalWidth ?? 1,
-    height: el.naturalHeight ?? 1,
-    close() {},
-  } as ImageBitmap
+  return new ImageBitmapStub(el.naturalWidth ?? 1, el.naturalHeight ?? 1) as unknown as ImageBitmap
 }
 
 // ---------------------------------------------------------------------------
