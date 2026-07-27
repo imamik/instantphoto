@@ -50,7 +50,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.31.1",
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "1.60.0",
+    "@playwright/test": "1.62.0",
     "@storybook/addon-docs": "10.5.3",
     "@storybook/addon-mcp": "^0.7.0",
     "@storybook/react-vite": "10.5.3",
